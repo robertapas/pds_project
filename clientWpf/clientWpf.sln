@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clientWpf", "clientWpf\clientWpf.csproj", "{C7A274B1-8542-4CB1-A5FC-358674421A5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06891B43-D675-4152-B806-EB17A9BA8AA3}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Desktop\user-icon-png-pnglogocom.png = ..\..\..\..\Desktop\user-icon-png-pnglogocom.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
