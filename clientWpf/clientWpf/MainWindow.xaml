@@ -1,17 +1,24 @@
-﻿<Window x:Class="clientWpf.MainWindow"
+﻿<Window x:Name="SyncBox" x:Class="clientWpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:clientWpf"
         mc:Ignorable="d"
-        Title="SyncBox" Height="350" Width="525">
+        Title="SyncBox" Height="350" Width="525" BorderThickness="0" Background="#FFDEEEEB" BorderBrush="Black">
     <Grid Margin="0,10,-6.6,-0.2">
-        <Image x:Name="UserImage" Source="user.png" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Margin="27,37,0,0"/>
-        <Button x:Name="blogin" Content="LogIn" HorizontalAlignment="Left" Margin="160,118,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.287,0.8"/>
-        <ListBox x:Name="lbstatus" HorizontalAlignment="Left" Height="117" Margin="27,159,0,0" VerticalAlignment="Top" Width="473"/>
-        <Label x:Name="label" Content="User:" HorizontalAlignment="Left" Margin="160,51,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.525,-0.701"/>
-        <StatusBar x:Name="statusbar" HorizontalAlignment="Left" Height="25" Margin="27,276,0,0" VerticalAlignment="Top" Width="473"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="524"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="296*"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="UserImage" Source="user.png" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Margin="27,24,0,0" Grid.Row="1"/>
+        <Button x:Name="blogin" Content="LogIn" HorizontalAlignment="Left" Margin="143,55,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.287,0.8" Grid.Row="1"/>
+        <ListBox x:Name="lbstatus" HorizontalAlignment="Left" Height="117" Margin="27,146,0,0" VerticalAlignment="Top" Width="473" Grid.Row="1"/>
+        <Label x:Name="label" Content="User:" HorizontalAlignment="Left" Margin="143,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.525,-0.701" Grid.Row="1"/>
+        <StatusBar x:Name="statusbar" HorizontalAlignment="Left" Height="25" Margin="27,268,0,0" VerticalAlignment="Top" Width="473" Grid.Row="1" Background="White" BorderThickness="1" BorderBrush="#FFABADB3"/>
 
 
     </Grid>
