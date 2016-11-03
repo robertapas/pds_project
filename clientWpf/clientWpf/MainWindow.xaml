@@ -39,7 +39,7 @@
                         <ColumnDefinition Width="199*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Your Directory:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
-                    <TextBox Name="tDirectory" Text="D:\ProgettoMalnati\client" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,36,49,0" Grid.ColumnSpan="2"/>
+                    <TextBox Name="tDirectory" Text="C:\prova" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,36,49,0" Grid.ColumnSpan="2"/>
                     <Button Name="bBrowse" Content="..." HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" RenderTransformOrigin="3.136,8.118" Margin="0,36,14,0" Height="23" Click="Browse_Click" Grid.Column="1"/>
                     <Button Name="bStart" Content="Start sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,165" Click="StartSync_Click" IsEnabled="False"/>
                     <Button Name="bStop" Content="Stop sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="108,0,0,165" IsEnabled="False" Click="StopSync_Click" Grid.ColumnSpan="2"/>
