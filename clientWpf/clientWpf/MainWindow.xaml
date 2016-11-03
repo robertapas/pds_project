@@ -7,19 +7,99 @@
         mc:Ignorable="d"
         Title="SyncBox" Height="350" Width="525" BorderThickness="0" Background="#FFDEEEEB" BorderBrush="Black">
     <Grid Margin="0,10,-6.6,-0.2">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="524"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="13*"/>
-            <RowDefinition Height="296*"/>
-        </Grid.RowDefinitions>
-        <Image x:Name="UserImage" Source="user.png" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Margin="27,24,0,0" Grid.Row="1"/>
-        <Button x:Name="blogin" Content="LogIn" HorizontalAlignment="Left" Margin="143,55,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.287,0.8" Grid.Row="1"/>
-        <ListBox x:Name="lbstatus" HorizontalAlignment="Left" Height="117" Margin="27,146,0,0" VerticalAlignment="Top" Width="473" Grid.Row="1"/>
-        <Label x:Name="label" Content="User:" HorizontalAlignment="Left" Margin="143,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.525,-0.701" Grid.Row="1"/>
-        <StatusBar x:Name="statusbar" HorizontalAlignment="Left" Height="25" Margin="27,268,0,0" VerticalAlignment="Top" Width="473" Grid.Row="1" Background="White" BorderThickness="1" BorderBrush="#FFABADB3"/>
-        <Button x:Name="bFolder" Content="Browse" HorizontalAlignment="Left" Margin="402,105.2,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
+        <TabControl Margin="0,0,9.6,30.2">
+            <TabItem Header="LogIn" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="55" IsSelected="True">
+                <TabItem.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="#FFB1DEDE" Offset="1"/>
+                    </LinearGradientBrush>
+                </TabItem.Background>
+                <Grid Background="White" Margin="0,0,0,-2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="17*"/>
+                        <ColumnDefinition Width="99*"/>
+                        <ColumnDefinition Width="402*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="UserImage" Source="user.png" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Width="79" Margin="10,24,0,0" Grid.Column="1"/>
+                    <Button x:Name="blogin" Content="LogIn" HorizontalAlignment="Left" Margin="0,55,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.287,0.8" Grid.Column="2" Height="20"/>
+                    <Label Content="User:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,24,0,0" Grid.Column="2" Height="26" Width="36"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Home" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="55">
+                <TabItem.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </TabItem.Background>
+                <Grid Background="White" Margin="0,0,0,-2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60*"/>
+                        <ColumnDefinition Width="199*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Your Directory:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
+                    <TextBox Name="tDirectory" Text="D:\ProgettoMalnati\client" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,36,49,0" Grid.ColumnSpan="2"/>
+                    <Button Name="bBrowse" Content="..." HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" RenderTransformOrigin="3.136,8.118" Margin="0,36,14,0" Height="23" Click="Browse_Click" Grid.Column="1"/>
+                    <Button Name="bStart" Content="Start sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,165" Click="StartSync_Click" IsEnabled="False"/>
+                    <Button Name="bStop" Content="Stop sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="108,0,0,165" IsEnabled="False" Click="StopSync_Click" Grid.ColumnSpan="2"/>
+                    <ListBox x:Name="lbstatus" HorizontalAlignment="Left" Height="117" Margin="10,113,0,0" VerticalAlignment="Top" Width="473" Grid.ColumnSpan="2"/>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Versions">
+                <TabItem.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </TabItem.Background>
+                <Grid Background="White" Margin="0,0,0,-3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="46*"/>
+                        <ColumnDefinition Width="81*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView Name="lVersions" Margin="10,10,10,35" SelectionMode="Single" MouseDoubleClick="lVersions_MouseDoubleClick" Grid.ColumnSpan="2">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Version" Width="60" DisplayMemberBinding="{Binding sVersion}"/>
+                                <GridViewColumn Header="NewFiles" Width="60" DisplayMemberBinding="{Binding sNewFiles}"/>
+                                <GridViewColumn Header="EditFiles" Width="60" DisplayMemberBinding="{Binding sEditFiles}"/>
+                                <GridViewColumn Header="DelFIles" Width="60" DisplayMemberBinding="{Binding sDelFiles}"/>
+                                <GridViewColumn Header="DateTime" Width="150" DisplayMemberBinding="{Binding sDateTime}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button Name="bRestore" Content="Restore" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="0,0,10,10" IsEnabled="False" Click="Restore_Click" Grid.Column="1"/>
+                    <Button Name="bGetVersions" Content="Get versions" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,10" IsEnabled="False" Click="GetVersions_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <TabItem.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </TabItem.Background>
+                <Grid Background="White" Margin="0,0,0,-2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60*"/>
+                        <ColumnDefinition Width="199*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="Server address:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.501" Margin="10,64,0,0"/>
+                    <TextBox Name="tAddress" Height="23" Margin="10,90,104,0" TextWrapping="Wrap" Text="192.168.1.130" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <Label Content="Port:" HorizontalAlignment="Right" Margin="0,64,60,0" VerticalAlignment="Top" RenderTransformOrigin="0.496,0.501" Grid.Column="1"/>
+                    <TextBox Name="tPort" HorizontalAlignment="Right" Height="23" Margin="0,90,10,0" TextWrapping="Wrap" Text="55555" VerticalAlignment="Top" Width="85" Grid.Column="1"/>
+                    <Label Content="Sync time[s]:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.605,6.115" Margin="10,118,0,0"/>
+                    <TextBox Name="tTimeout" TextWrapping="Wrap" Text="10" Margin="10,144,0,0" ToolTip="Time between two sync" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100"/>
+                    <Button Name="bSyncNow" Content="Sync now" Margin="0,0,14,10" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom" IsEnabled="False" Click="bSyncNow_Click" Grid.Column="1"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StatusBar x:Name="statusbar" HorizontalAlignment="Left" Height="16" Margin="0,293,0,0" VerticalAlignment="Top" Width="514" Background="White" BorderThickness="1" BorderBrush="#FFABADB3"/>
+
+
 
 
     </Grid>
