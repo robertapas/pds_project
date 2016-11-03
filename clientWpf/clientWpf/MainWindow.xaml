@@ -19,6 +19,7 @@
         <ListBox x:Name="lbstatus" HorizontalAlignment="Left" Height="117" Margin="27,146,0,0" VerticalAlignment="Top" Width="473" Grid.Row="1"/>
         <Label x:Name="label" Content="User:" HorizontalAlignment="Left" Margin="143,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.525,-0.701" Grid.Row="1"/>
         <StatusBar x:Name="statusbar" HorizontalAlignment="Left" Height="25" Margin="27,268,0,0" VerticalAlignment="Top" Width="473" Grid.Row="1" Background="White" BorderThickness="1" BorderBrush="#FFABADB3"/>
+        <Button x:Name="bFolder" Content="Browse" HorizontalAlignment="Left" Margin="402,105.2,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75"/>
 
 
     </Grid>
