@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApplication1
 {
-    partial class Form1
+    partial class fSyncServer
     {
         /// <summary>
         /// Variabile di progettazione necessaria.
@@ -292,6 +292,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tSettings.ResumeLayout(false);
             this.tSettings.PerformLayout();
