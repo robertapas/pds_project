@@ -206,6 +206,38 @@ namespace clientWpf
             FocusManager.SetFocusedElement(this, tUsername);
         }*/
 
+        private void forceStop()
+        {
+            bStop.IsEnabled = false;
+            bSyncNow.IsEnabled = false;
+            bRestore.IsEnabled = false;
+            bGetVersions.IsEnabled = false;
+            syncManager.stopSync();
+            bStart.IsEnabled = true;
+            tDirectory.IsEnabled = true;
+            tTimeout.IsEnabled = true;
+            bBrowse.IsEnabled = true;
+            tAddress.IsEnabled = true;
+            tPort.IsEnabled = true;
+        }
 
+        private void updateStatus(String message, bool fatalError)
+        {
+            this.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                updateStatus(message);
+                if (fatalError)
+                {
+                    forceStop();
+                }
+            }));
+        }
+        private void updateStatusBar(int percentage)
+        {
+            this.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                lStatusBar.Value = percentage;
+            }));
+        }
     }
 }
