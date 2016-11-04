@@ -25,57 +25,84 @@ namespace clientWpf
         public enum LoginResponse { LOGIN, REGISTER};
         private LoginResponse lastResponse;
         private String username, password;
+        private bool loggedin = false;
+        private SyncManager syncManager;
+        private SettingsManager settingsManager;
 
         public MainWindow()
         {
             InitializeComponent();
             lError.Content = "";
+            // initialize my data structure
+            syncManager = new SyncManager();
+            syncManager.setStatusDelegate(updateStatus, updateStatusBar);
+
+            // Settings manager
+            settingsManager = new SettingsManager();
+            tAddress.Text = settingsManager.readSetting("connection", "address");
+            tPort.Text = settingsManager.readSetting("connection", "port");
+            tDirectory.Text = settingsManager.readSetting("account", "directory");
+            tTimeout.Text = settingsManager.readSetting("connection", "syncTime");
         }
 
-
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+            
+            
+            // Start the login procedure
+            this.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                // i have to create the connection in order to perform the login
+                openLogin();
+            }));
+        }
 
         private async void openLogin()
         {
             //LoginWindow lw = new LoginWindow();
             bool loginAuthorized = false;
             bLogInOut.IsEnabled = false;
-            lw.Username = settingsManager.readSetting("account", "username");
-            lw.Username = settingsManager.readSetting("account", "password");
+            this.Username = settingsManager.readSetting("account", "username");
+            this.Password = settingsManager.readSetting("account", "password");
             while (!loginAuthorized)
             {
-                lw.showLogin();
+                //lw.showLogin();
                 try
                 {
-                    switch (lw.waitResponse())
+                    switch (waitResponse())
                     {
-                        case LoginWindow.LoginResponse.CANCEL:
-                            //System.Windows.Application.Current.Shutdown();
-                            lw.Close();
-                            bLogInOut.IsEnabled = true;
-                            return;
-                        case LoginWindow.LoginResponse.LOGIN:
-                            loginAuthorized = await syncManager.login(tAddress.Text, Convert.ToInt32(tPort.Text), lw.Username, lw.Password);
+                        
+                        case LoginResponse.LOGIN:
+                            loginAuthorized = await syncManager.login(tAddress.Text, Convert.ToInt32(tPort.Text), this.Username, this.Password);
                             if (!loginAuthorized)
                             {
-                                lw.ErrorMessage = "Login faild";
+                                this.ErrorMessage = "Login faild";
                             }
+                            tpHome.IsEnabled = true;
+                            tpSettings.IsEnabled = true;
+                            tpVersions.IsEnabled = true;
                             break;
-                        case LoginWindow.LoginResponse.REGISTER:
-                            loginAuthorized = await syncManager.login(tAddress.Text, Convert.ToInt32(tPort.Text), lw.Username, lw.Password, tDirectory.Text, true);
+                        case LoginResponse.REGISTER:
+                            loginAuthorized = await syncManager.login(tAddress.Text, Convert.ToInt32(tPort.Text), this.Username, this.Password, tDirectory.Text, true);
                             if (!loginAuthorized)
                             {
-                                lw.ErrorMessage = "Registration faild";
+                                this.ErrorMessage = "Registration faild";
                             }
+                            tpHome.IsEnabled = true;
+                            tpSettings.IsEnabled = true;
+                            tpVersions.IsEnabled = true;
                             break;
                         default:
                             throw new Exception("Not implemented");
                     }
                     if (loginAuthorized)
                     {
-                        lUsername.Content = lw.Username;
+                        lUsername.Content = this.Username;
                         bLogInOut.Content = "Logout";
-                        lw.Close();
-                        settingsManager.writeSetting("account", "username", lw.Username);
+                        //lw.Close();
+                        //ABILITA PANNELLI
+                        settingsManager.writeSetting("account", "username", this.Username);
                         /*if(lw.KeepLoggedIn)
 							settingsManager.writeSetting("account", "password", lw.Username);
 						else
@@ -89,11 +116,19 @@ namespace clientWpf
                 }
                 catch (Exception ex)
                 {
-                    lw.ErrorMessage = ex.Message;
+                    this.ErrorMessage = ex.Message;
                     loginAuthorized = false;
                 }
             }
             bLogInOut.IsEnabled = true;
+        }
+
+        private void updateStatus(String newStatus)
+        {
+            lStatus.Content = newStatus;
+            ListBoxItem lbi = new ListBoxItem();
+            lbi.Content = newStatus;
+            lbStatus.Items.Add(lbi);
         }
 
         public LoginResponse waitResponse()
@@ -144,7 +179,7 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.LOGIN;
-            this.Hide();
+            //this.Hide();
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
@@ -157,11 +192,11 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.REGISTER;
-            this.Hide();
+            //this.Hide();
         }
 
 
-        private void Window_Closed(object sender, EventArgs e)
+        /*private void Window_Closed(object sender, EventArgs e)
         {
             this.Hide();
         }
@@ -169,7 +204,7 @@ namespace clientWpf
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             FocusManager.SetFocusedElement(this, tUsername);
-        }
+        }*/
 
 
     }
