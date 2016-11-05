@@ -103,13 +103,17 @@ namespace clientWpf
         {
             int bytesSent;
             // Get the command string
-            String sCommand = command.convertToString();
+            String sCommand = command.convertToString(); //serialize to send
+
             // Send the data through the socket
             while (sCommand.Length > 0)
             {
+                //codifica in byte e invia
                 bytesSent = tcpClient.Send(Encoding.ASCII.GetBytes(sCommand));
-                sCommand = sCommand.Substring(bytesSent); // cat the message part already sent
+                 // cat the message part already sent
+                sCommand = sCommand.Substring(bytesSent);
             }
+
             if (receiveCommand().Type != SyncCommand.CommandSet.ACK)
             {
                 statusDelegate("Protocol error", true);
@@ -139,6 +143,7 @@ namespace clientWpf
             statusBarDelegate(5);
             if (Regex.IsMatch(address, "^\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}$"))
             {
+                //is ipv4 address
                 String[] parts = address.Split('.');
                 ipAddress = new IPAddress(new byte[] { Byte.Parse(parts[0]), Byte.Parse(parts[1]), Byte.Parse(parts[2]), Byte.Parse(parts[3]) });
             }
