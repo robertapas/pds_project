@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 
 namespace clientWpf
 {
@@ -32,7 +34,7 @@ namespace clientWpf
         public MainWindow()
         {
             InitializeComponent();
-            lError.Content = "";
+            lError.Text= "";
             // initialize my data structure
             syncManager = new SyncManager();
             syncManager.setStatusDelegate(updateStatus, updateStatusBar);
@@ -79,9 +81,6 @@ namespace clientWpf
                             {
                                 this.ErrorMessage = "Login faild";
                             }
-                            tpHome.IsEnabled = true;
-                            tpSettings.IsEnabled = true;
-                            tpVersions.IsEnabled = true;
                             break;
                         case LoginResponse.REGISTER:
                             loginAuthorized = await syncManager.login(tAddress.Text, Convert.ToInt32(tPort.Text), this.Username, this.Password, tDirectory.Text, true);
@@ -89,18 +88,18 @@ namespace clientWpf
                             {
                                 this.ErrorMessage = "Registration faild";
                             }
-                            tpHome.IsEnabled = true;
-                            tpSettings.IsEnabled = true;
-                            tpVersions.IsEnabled = true;
                             break;
                         default:
                             throw new Exception("Not implemented");
                     }
                     if (loginAuthorized)
                     {
+                        tpHome.IsEnabled = true;
+                        tpSettings.IsEnabled = true;
+                        tpVersions.IsEnabled = true;
                         lUsername.Content = this.Username;
                         bLogInOut.Content = "Logout";
-                        //lw.Close();
+
                         //ABILITA PANNELLI
                         settingsManager.writeSetting("account", "username", this.Username);
                         /*if(lw.KeepLoggedIn)
@@ -165,7 +164,7 @@ namespace clientWpf
         {
             set
             {
-                lError.Content = value;
+                lError.Text = value;
             }
         }
 
@@ -175,11 +174,11 @@ namespace clientWpf
             password = tPassword.Password;
             if (username == "" || password == "")
             {
-                this.ErrorMessage = "Username and passwrod cannot be empty";
+                this.ErrorMessage = "Username and password cannot be empty";
                 return;
             }
             lastResponse = LoginResponse.LOGIN;
-            //this.Hide();
+
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
@@ -192,9 +191,25 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.REGISTER;
-            //this.Hide();
+
         }
 
+        private void LogInOut_Click(object sender, RoutedEventArgs e)
+        {
+            if (loggedin)
+            {
+                forceStop();
+                lUsername.Content = "";
+                loggedin = false;
+                tpLogin.IsSelected = true;
+                tpHome.IsEnabled = false;
+                tpSettings.IsEnabled = false;
+                tpVersions.IsEnabled = false;
+                //TODO: set focus on LOgIn tab
+            }
+            lVersions.Items.Clear();
+            this.openLogin();
+        }
 
         /*private void Window_Closed(object sender, EventArgs e)
         {
@@ -232,6 +247,18 @@ namespace clientWpf
                 }
             }));
         }
+
+        private void Browse_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.Description = "Select the folder to synchronize";
+            folderBrowserDialog.ShowNewFolderButton = true;
+            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                tDirectory.Text = folderBrowserDialog.SelectedPath;
+            }
+        }
+
         private void updateStatusBar(int percentage)
         {
             this.Dispatcher.BeginInvoke((Action)(() =>
