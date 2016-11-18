@@ -35,11 +35,24 @@ namespace WindowsFormsApplication1
             }
         }
 
+        private int executeQuery(string query)
+        {
+            SQLiteCommand command = new SQLiteCommand(query, connection);
+            return command.ExecuteNonQuery();
+        }
+
+        private int executeQuery(string query, Object param1)
+        {
+            // Example: "SELECT something FROM tabletop WHERE color = @param1"
+            SQLiteCommand command = new SQLiteCommand(query, connection);
+            command.Parameters.AddWithValue("param1", param1);
+            return command.ExecuteNonQuery();
+        }
+
         private void initDatabaseStructure()
         {
             this.executeQuery("CREATE TABLE users (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, password TEXT NOT NULL, user_dir TEXT NOT NULL);");
         }
-
 
         public class UserVersions
         {

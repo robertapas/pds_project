@@ -33,7 +33,7 @@ namespace WindowsFormsApplication1
             // Allocate resources
             stateClient = new StateObject();
             receiveDone = new ManualResetEvent(false);
-            clientThread = new BackgroundWorker();
+            clientThread = new BackgroundWorker(); //esegue su thread separato
             mySQLite = new SyncSQLite();
             tempCheck = new List<FileChecksum>();
             // Init client info
@@ -43,8 +43,8 @@ namespace WindowsFormsApplication1
             serverDir = workDir;
 
             // Init thread
-            clientThread.DoWork += new DoWorkEventHandler(doClient);
-            clientThread.RunWorkerCompleted += new RunWorkerCompletedEventHandler(doClientComplete);
+            clientThread.DoWork += new DoWorkEventHandler(doClient); //attach an event handler to the backgroundworker
+            clientThread.RunWorkerCompleted += new RunWorkerCompletedEventHandler(doClientComplete);//attach the event that is generated when doClient returns
             clientThread.RunWorkerAsync();
         }
 
@@ -54,6 +54,61 @@ namespace WindowsFormsApplication1
             syncEnd = true;
             wellEnd = true;
         }
+        public void ReceiveCommand(Socket client)
+        {
+            if (!SocketConnected(stateClient.workSocket))
+            {
+                badStop();
+                receiveDone.Set();
+                return;
+            }
+
+            // Begin receiving the data from the remote device.
+            IAsyncResult iAR = client.BeginReceive(stateClient.buffer, 0, StateObject.BUFFER_SIZE, 0, new AsyncCallback(ReceiveCallback), null);
+            bool success = iAR.AsyncWaitHandle.WaitOne(RECEIVE_TIMEOUT, true);
+
+            if (!success)
+            {
+                statusDelegate("Timeout Expired", fSyncServer.LOG_WARNING);
+                badStop();
+                receiveDone.Set();
+                return;
+            }
+        }
+
+        private void doClient(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                while (!syncEnd)
+                {
+                    receiveDone.Reset();
+                    // Receive the response from the remote device.
+                    this.ReceiveCommand(stateClient.workSocket);
+                    if (!syncEnd)
+                    {
+                        receiveDone.WaitOne();
+                        if (doCommand())
+                            statusDelegate("Slave Thread Done Command Successfully ", fSyncServer.LOG_INFO);
+                        else
+                            statusDelegate("Slave Thread Done Command with no Success", fSyncServer.LOG_ERROR);
+                    }
+                    else break;
+                }
+                if (!wellEnd)
+                    statusDelegate("All NOT Well End Terminated", fSyncServer.LOG_ERROR);
+                else
+                    statusDelegate("All Well End Terminated", fSyncServer.LOG_INFO);
+            }
+            catch (Exception ex)
+            {
+                if (!syncEnd)
+                {
+                    statusDelegate("Exception: " + ex.Message, fSyncServer.LOG_ERROR);
+                }
+            }
+        }
+
 
     }
 }
