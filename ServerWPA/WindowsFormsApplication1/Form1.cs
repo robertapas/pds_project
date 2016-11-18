@@ -50,6 +50,7 @@ namespace WindowsFormsApplication1
 
         private void numberClient(int nclient)
         {
+            /*update num connected client info*/
             lConnectedNum.BeginInvoke(new Action(() => { lConnectedNum.Text = nclient.ToString(); }));
         }
 
@@ -74,5 +75,34 @@ namespace WindowsFormsApplication1
             lbLog.BeginInvoke(new Action(() => { lbLog.SelectedIndex = lbLog.Items.Count - 1; }));
         }
 
+        private void bStartClick(object sender, EventArgs e)
+        {
+            try
+            {
+                syncManager.startSync(Decimal.ToInt32(Int32.Parse(settings[0])), settings[1], Decimal.ToInt32(Int32.Parse(settings[2])));
+                tDirectory.Enabled = false;
+                nPort.Enabled = false;
+                bStart.Enabled = false;
+                nUDVersion.Enabled = false;
+                bStop.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                this.appendStatus(ex.Message, LOG_ERROR);
+            }
+        }
+
+        private void nPort_ValueChanged(object sender, EventArgs e)
+        {
+            settings[0] = nPort.Value.ToString();
+        }
+
+        private void nUDVersion_ValueChanged(object sender, EventArgs e)
+        {
+
+            settings[2] = nUDVersion.Value.ToString();
+        }
+
+       
     }
 }
