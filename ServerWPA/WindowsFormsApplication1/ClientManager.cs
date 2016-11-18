@@ -54,6 +54,13 @@ namespace WindowsFormsApplication1
             syncEnd = true;
             wellEnd = true;
         }
+
+        public void badStop()
+        {
+            syncEnd = true;
+            wellEnd = false;
+        }
+
         public void ReceiveCommand(Socket client)
         {
             if (!SocketConnected(stateClient.workSocket))
@@ -75,6 +82,64 @@ namespace WindowsFormsApplication1
                 return;
             }
         }
+
+
+        public void ReceiveCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Read data from the remote device.
+                if ((!syncEnd) && stateClient.workSocket.Connected == true)
+                {
+                    int bytesRead = stateClient.workSocket.EndReceive(ar);
+
+                    if ((bytesRead > 0))
+                    {
+                        // There might be more data, so store the data received so far.
+                        stateClient.sb.Append(Encoding.ASCII.GetString(stateClient.buffer, 0, bytesRead));
+                    }
+                    if (SyncCommand.searchJsonEnd(stateClient.sb.ToString()) == -1)
+                    {
+                        // Get the rest of the data.
+                        stateClient.workSocket.BeginReceive(stateClient.buffer, 0, StateObject.BUFFER_SIZE, 0, new AsyncCallback(ReceiveCallback), null);
+                    }
+                    else
+                    {
+                        // All the data has arrived; put it in response.
+                        if (stateClient.sb.Length > 1)
+                        {
+                            cmd = SyncCommand.convertFromString(stateClient.sb.ToString());
+                            stateClient.sb.Clear();
+                            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ACK));
+                        }
+                        // Signal that all bytes have been received.
+                        receiveDone.Set();
+                    }
+                }
+                else
+                    receiveDone.Set();
+            }
+            catch (Exception e)
+            {
+                if (!syncEnd)
+                {
+                    statusDelegate("Exception: " + e.Message, fSyncServer.LOG_ERROR);
+                    badStop();
+                }
+            }
+        }
+
+        public Boolean SocketConnected(Socket s)
+        {
+            //determina lo stato del socket
+            bool part1 = s.Poll(1000, SelectMode.SelectRead); 
+            bool part2 = (s.Available == 0); //se ha ricevuto qualcosa o meno
+            if (part1 && part2)
+                return false;
+            else
+                return true;
+        }
+
 
         private void doClient(object sender, DoWorkEventArgs e)
         {
@@ -106,6 +171,18 @@ namespace WindowsFormsApplication1
                 {
                     statusDelegate("Exception: " + ex.Message, fSyncServer.LOG_ERROR);
                 }
+            }
+        }
+
+
+        public void SendCommand(Socket handler, SyncCommand command)
+        {
+            if (!syncEnd)
+            {
+                // Convert the string data to byte data using ASCII encoding.
+                byte[] byteData = Encoding.ASCII.GetBytes(command.convertToString());
+                // Begin sending the data to the remote device.
+                handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler);
             }
         }
 
