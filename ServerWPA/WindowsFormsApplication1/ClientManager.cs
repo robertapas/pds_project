@@ -271,7 +271,7 @@ namespace WindowsFormsApplication1
                         }
                         return GetFile();*/
                     default:
-                        statusDelegate("Recieved Wrong Command", fSyncServer.LOG_ERROR);
+                        statusDelegate("Received Wrong Command", fSyncServer.LOG_ERROR);
                         badStop();
                         return false;
                 }

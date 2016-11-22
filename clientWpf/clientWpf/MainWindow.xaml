@@ -21,18 +21,19 @@
                 </TabItem.Background>
                 <Grid Background="White" Margin="10,0,-1,-2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="242*"/>
-                        <ColumnDefinition Width="335*"/>
+                        <ColumnDefinition Width="26*"/>
+                        <ColumnDefinition Width="54*"/>
+                        <ColumnDefinition Width="111*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image x:Name="UserImage" Source="user.png" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Width="79" Margin="34,24,0,0" UseLayoutRounding="False"/>
-                    <Label Content="Username:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="113,33,0,0"/>
-                    <TextBox Name="tUsername" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="184,33,190,0" Grid.ColumnSpan="2" UseLayoutRounding="True"/>
-                    <Label Content="Password:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="113,71,0,0" UseLayoutRounding="False"/>
-                    <PasswordBox Name="tPassword" VerticalAlignment="Top" Height="23" Margin="185,74,190,0" Grid.ColumnSpan="2" UseLayoutRounding="True"/>
-                    <Button Content="LogIn" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="185,117,0,0" Click="LogIn_Click" Grid.ColumnSpan="2" UseLayoutRounding="True"/>
-                    <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="65,117,0,0" Click="Register_Click" Grid.Column="1" UseLayoutRounding="True"/>
-                    <TextBox x:Name="lError" Grid.ColumnSpan="2" Height="45" Margin="184,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="199" FontWeight="Bold" Foreground="#FFEC0404" BorderThickness="0" HorizontalAlignment="Left" HorizontalContentAlignment="Center"/>
+                    <Image x:Name="UserImage" Source="user.png" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Width="79" Margin="34,24,0,0" UseLayoutRounding="False" Grid.ColumnSpan="2"/>
+                    <Label Content="Username:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,33,0,0" Grid.Column="1"/>
+                    <TextBox Name="tUsername" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="106,33,190,0" Grid.ColumnSpan="2" UseLayoutRounding="True" Grid.Column="1"/>
+                    <Label Content="Password:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,71,0,0" UseLayoutRounding="False" Grid.Column="1"/>
+                    <PasswordBox Name="tPassword" VerticalAlignment="Top" Height="23" Margin="107,74,190,0" Grid.ColumnSpan="2" UseLayoutRounding="True" Grid.Column="1"/>
+                    <Button x:Name="bLogIn" Content="LogIn" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="107,117,0,0" Click="LogIn_Click" Grid.ColumnSpan="2" UseLayoutRounding="True" Grid.Column="1"/>
+                    <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="65,117,0,0" Click="Register_Click" Grid.Column="2" UseLayoutRounding="True"/>
+                    <TextBox x:Name="lError" Grid.ColumnSpan="2" Height="45" Margin="106,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="199" FontWeight="Bold" Foreground="#FFEC0404" BorderThickness="0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Grid.Column="1"/>
                     <!--CheckBox Name="cbKeep" Content="Keep me logged in" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,123,0,0" IsChecked="True"/-->
                 </Grid>
             </TabItem>
@@ -50,7 +51,7 @@
                         <ColumnDefinition Width="48*"/>
                         <ColumnDefinition Width="391*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="bLogInOut" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="306,10,0,0" Click="LogInOut_Click" Grid.Column="3"/>
+                    <Button x:Name="bLogOut" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="306,10,0,0" Click="LogOut_Click" Grid.Column="3"/>
                     <Label Content="Your Directory:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0" Grid.ColumnSpan="2"/>
                     <TextBox Name="tDirectory" Text="C:\prova" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,71,74,0" Grid.ColumnSpan="4"/>
                     <Button Name="bBrowse" Content="..." HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" RenderTransformOrigin="3.136,8.118" Margin="0,71,28,0" Height="23" Click="Browse_Click" Grid.Column="3"/>

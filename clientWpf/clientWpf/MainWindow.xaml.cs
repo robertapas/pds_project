@@ -47,7 +47,7 @@ namespace clientWpf
             tTimeout.Text = settingsManager.readSetting("connection", "syncTime");
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+       /* private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             
             // Start the login procedure
@@ -56,15 +56,15 @@ namespace clientWpf
                 // i have to create the connection in order to perform the login
                 openLogin();
             }));
-        }
+        }*/
 
         private async void openLogin()
         {
             //LoginWindow lw = new LoginWindow();
             bool loginAuthorized = false;
-            bLogInOut.IsEnabled = false;
-            this.Username = settingsManager.readSetting("account", "username");
-            this.Password = settingsManager.readSetting("account", "password");
+            bLogOut.IsEnabled = false;
+            //this.Username = settingsManager.readSetting("account", "username");
+            //this.Password = settingsManager.readSetting("account", "password");
             while (!loginAuthorized)
             {
                 //lw.showLogin();
@@ -77,7 +77,7 @@ namespace clientWpf
                             loginAuthorized = await syncManager.login(tAddress.Text, Convert.ToInt32(tPort.Text), this.Username, this.Password);
                             if (!loginAuthorized)
                             {
-                                this.ErrorMessage = "Login faild";
+                                this.ErrorMessage = "Login failed";
                             }
                             break;
                         case LoginResponse.REGISTER:
@@ -93,10 +93,11 @@ namespace clientWpf
                     if (loginAuthorized)
                     {
                         tpHome.IsEnabled = true;
+                        tpHome.IsSelected = true;
                         tpSettings.IsEnabled = true;
                         tpVersions.IsEnabled = true;
                         lUsername.Content = this.Username;
-                        bLogInOut.Content = "Logout";
+                        bLogOut.Content = "Logout";
 
                         //ABILITA PANNELLI
                         settingsManager.writeSetting("account", "username", this.Username);
@@ -117,7 +118,7 @@ namespace clientWpf
                     loginAuthorized = false;
                 }
             }
-            bLogInOut.IsEnabled = true;
+            bLogOut.IsEnabled = true;
         }
 
         private void updateStatus(String newStatus)
@@ -176,6 +177,7 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.LOGIN;
+            this.openLogin();
 
         }
 
@@ -189,10 +191,11 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.REGISTER;
+            this.openLogin();
 
         }
 
-        private void LogInOut_Click(object sender, RoutedEventArgs e)
+        private void LogOut_Click(object sender, RoutedEventArgs e)
         {
             if (loggedin)
             {
@@ -203,10 +206,10 @@ namespace clientWpf
                 tpHome.IsEnabled = false;
                 tpSettings.IsEnabled = false;
                 tpVersions.IsEnabled = false;
-                //TODO: set focus on LOgIn tab
+                
             }
             lVersions.Items.Clear();
-            this.openLogin();
+
         }
 
         /*private void Window_Closed(object sender, EventArgs e)
@@ -256,6 +259,7 @@ namespace clientWpf
                 tDirectory.Text = folderBrowserDialog.SelectedPath;
             }
         }
+
 
         private void updateStatusBar(int percentage)
         {

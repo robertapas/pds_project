@@ -228,6 +228,11 @@
             // 
             this.nPort.Location = new System.Drawing.Point(22, 34);
             this.nPort.Margin = new System.Windows.Forms.Padding(2);
+            this.nPort.Maximum = new decimal(new int[] {
+            60000,
+            0,
+            0,
+            0});
             this.nPort.Name = "nPort";
             this.nPort.Size = new System.Drawing.Size(90, 20);
             this.nPort.TabIndex = 0;
@@ -339,7 +344,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "fSyncServer";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.fSyncServer_Load);
             this.tabControl1.ResumeLayout(false);
             this.tSettings.ResumeLayout(false);
             this.tSettings.PerformLayout();
