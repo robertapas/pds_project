@@ -95,6 +95,7 @@
             this.tSettings.TabIndex = 0;
             this.tSettings.Text = "Settings";
             this.tSettings.UseVisualStyleBackColor = true;
+            this.tSettings.Click += new System.EventHandler(this.tSettings_Click);
             // 
             // nUDVersion
             // 

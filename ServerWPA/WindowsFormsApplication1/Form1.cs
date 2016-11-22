@@ -103,6 +103,9 @@ namespace WindowsFormsApplication1
             settings[2] = nUDVersion.Value.ToString();
         }
 
-       
+        private void tSettings_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

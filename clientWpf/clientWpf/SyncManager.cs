@@ -119,6 +119,7 @@ namespace clientWpf
                 statusDelegate("Protocol error", true);
             }
         }
+
         private SyncCommand receiveCommand()
         {
             byte[] data = new byte[1024];

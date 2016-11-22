@@ -50,8 +50,6 @@ namespace clientWpf
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             
-            
-            
             // Start the login procedure
             this.Dispatcher.BeginInvoke((Action)(() =>
             {
