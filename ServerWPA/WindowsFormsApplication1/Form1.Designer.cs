@@ -203,6 +203,7 @@
             this.bBrowse.TabIndex = 3;
             this.bBrowse.Text = "...";
             this.bBrowse.UseVisualStyleBackColor = true;
+            this.bBrowse.Click += new System.EventHandler(this.bBrowse_Click);
             // 
             // tDirectory
             // 

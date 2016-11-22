@@ -174,6 +174,25 @@ namespace WindowsFormsApplication1
             }
         }
 
+        public void doClientComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // todo Cosa succede se sto sincronizzando? devo fare un restore?
+            stateClient.workSocket.Close();
+            AsyncManagerServer.DecreaseClient();
+            statusDelegate("Server Stopped ", fSyncServer.LOG_INFO);
+            mySQLite.closeConnection();
+            if (tempCheck.Count > 0)
+            {
+                foreach (FileChecksum check in tempCheck)
+                {
+                    File.Delete(check.FileNameServer);
+                    statusDelegate("Delete File: " + check.FileNameServer, fSyncServer.LOG_WARNING);
+                }
+                tempCheck.Clear();
+            }
+        }
+
+
         public Boolean doCommand()
         {
             if (cmd != null)

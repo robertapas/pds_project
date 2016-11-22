@@ -35,6 +35,12 @@ namespace WindowsFormsApplication1
             }
         }
 
+        public void closeConnection()
+        {
+            connection.Close();
+            connection.Dispose();
+        }
+
         private int executeQuery(string query)
         {
             SQLiteCommand command = new SQLiteCommand(query, connection);

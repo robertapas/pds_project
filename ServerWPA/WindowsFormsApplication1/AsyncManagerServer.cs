@@ -107,6 +107,12 @@ namespace WindowsFormsApplication1
             numberDelegate(clientNumber);
         }
 
+        static public void DecreaseClient()
+        {
+            clientNumber--;
+            numberDelegate(clientNumber);
+        }
+
 
 
     }

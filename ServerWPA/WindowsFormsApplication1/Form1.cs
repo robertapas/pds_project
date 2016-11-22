@@ -17,7 +17,7 @@ namespace WindowsFormsApplication1
         public const int LOG_INFO = 1;
         public const int LOG_WARNING = 2;
         public const int LOG_ERROR = 3;
-        private String[] settings = new String[3];
+        private String[] settings = new String[3]; //port, 
         private SettingsManager settingsManager;
         private AsyncManagerServer syncManager;
         private delegate void AppendItem(String s);
@@ -29,16 +29,19 @@ namespace WindowsFormsApplication1
             settingsManager = new SettingsManager();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void fSyncServer_Load(object sender, EventArgs e)
         {
-
+            settings = settingsManager.readSettings();
+            nPort.Value = Int32.Parse(settings[0]);
+            tDirectory.Text = settings[1];
+            nUDVersion.Value = Int32.Parse(settings[2]);
         }
 
-        
+
         private void bBrowse_Click(object sender, EventArgs e)
         {
             /*Select folder to store files (mock DB)*/
-            FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.Description = "Select the server working directory";
             folderBrowserDialog.ShowNewFolderButton = true;
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
