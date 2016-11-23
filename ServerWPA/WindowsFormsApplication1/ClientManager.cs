@@ -20,7 +20,7 @@ namespace WindowsFormsApplication1
         private AsyncManagerServer.StatusDelegate statusDelegate;
         private ManualResetEvent receiveDone;
         private Boolean syncEnd = false;
-        private Boolean wellEnd = false;
+        private Boolean wellEnd = true;
         private List<FileChecksum> userChecksum;
         private List<FileChecksum> tempCheck;
         private SyncCommand cmd;
@@ -287,8 +287,8 @@ namespace WindowsFormsApplication1
         public void SendCommand(Socket handler, SyncCommand command)
         {
             if (!syncEnd)
-            {
-                // Convert the string data to byte data using ASCII encoding.
+            {   // Convert the string data to byte data using ASCII encoding.
+
                 byte[] byteData = Encoding.ASCII.GetBytes(command.convertToString());
                 // Begin sending the data to the remote device.
                 handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler);

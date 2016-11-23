@@ -65,9 +65,7 @@ namespace clientWpf
             bLogOut.IsEnabled = false;
             //this.Username = settingsManager.readSetting("account", "username");
             //this.Password = settingsManager.readSetting("account", "password");
-            while (!loginAuthorized)
-            {
-                //lw.showLogin();
+            
                 try
                 {
                     switch (waitResponse())
@@ -114,10 +112,11 @@ namespace clientWpf
                 }
                 catch (Exception ex)
                 {
+
                     this.ErrorMessage = ex.Message;
                     loginAuthorized = false;
                 }
-            }
+            
             bLogOut.IsEnabled = true;
         }
 

@@ -110,5 +110,15 @@ namespace WindowsFormsApplication1
         {
 
         }
+
+        private void bStop_Click(object sender, EventArgs e)
+        {
+            syncManager.stopSync();
+            tDirectory.Enabled = true;
+            nPort.Enabled = true;
+            bStart.Enabled = true;
+            nUDVersion.Enabled = true;
+            bStop.Enabled = false;
+        }
     }
 }

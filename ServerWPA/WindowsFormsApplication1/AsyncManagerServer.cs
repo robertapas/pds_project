@@ -113,6 +113,14 @@ namespace WindowsFormsApplication1
             numberDelegate(clientNumber);
         }
 
+        public void stopSync()
+        {
+            serverStopped = true;
+            listener.Close();
+            listeningThread.Join();
+            statusDelegate("Server stopped", fSyncServer.LOG_INFO);
+        }
+
 
 
     }

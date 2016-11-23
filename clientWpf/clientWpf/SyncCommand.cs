@@ -318,6 +318,7 @@ namespace clientWpf
                 {
                     case CommandSet.VERSION:
                         return data[2];
+
                     case CommandSet.CHECKVERSION:
                         return data[2];
                     default:
