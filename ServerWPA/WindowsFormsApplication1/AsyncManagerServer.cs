@@ -81,7 +81,7 @@ namespace WindowsFormsApplication1
                     AsyncManagerServer.IncreaseClient();
                     clients.Add(client);
 
-                    statusDelegate("Connected and Created New Thred to Serve Client", fSyncServer.LOG_INFO);
+                    statusDelegate("Connected and Created New Thread to Serve Client", fSyncServer.LOG_INFO);
                 }
             }
             catch (Exception e)
