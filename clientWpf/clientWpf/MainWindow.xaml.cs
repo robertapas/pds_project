@@ -209,6 +209,7 @@ namespace clientWpf
                 
             }
             lVersions.Items.Clear();
+            updateStatus("Logged Out");
 
         }
 
