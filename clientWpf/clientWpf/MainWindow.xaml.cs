@@ -65,9 +65,7 @@ namespace clientWpf
             bLogOut.IsEnabled = false;
             //this.Username = settingsManager.readSetting("account", "username");
             //this.Password = settingsManager.readSetting("account", "password");
-            while (!loginAuthorized)
-            {
-                //lw.showLogin();
+           
                 try
                 {
                     switch (waitResponse())
@@ -109,7 +107,7 @@ namespace clientWpf
                         bStart.IsEnabled = true;
                         loggedin = true;
                         updateStatus("Logged in");
-                        //StartSync_Click(null, null); // start sync
+
                     }
                 }
                 catch (Exception ex)
@@ -117,7 +115,7 @@ namespace clientWpf
                     this.ErrorMessage = ex.Message;
                     loginAuthorized = false;
                 }
-            }
+         
             bLogOut.IsEnabled = true;
         }
 
