@@ -80,9 +80,11 @@ namespace WindowsFormsApplication1
                     ClientManager client = new ClientManager(handler, defaultDir, defaultMaxVers, statusDelegate);
                     AsyncManagerServer.IncreaseClient();
                     clients.Add(client);
+                    
 
                     statusDelegate("Connected and Created New Thread to Serve Client", fSyncServer.LOG_INFO);
                 }
+                
             }
             catch (Exception e)
             {
@@ -92,10 +94,12 @@ namespace WindowsFormsApplication1
             {
                 // Close socket and clients
                 if (listener.Connected) listener.Close();
+                statusDelegate("Connection Closed", fSyncServer.LOG_INFO);
                 foreach (ClientManager client in clients)
                 {
                     client.WellStop();
                 }
+
             }
         }
 
