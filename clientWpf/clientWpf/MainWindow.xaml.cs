@@ -58,14 +58,16 @@ namespace clientWpf
             }));
         }*/
 
-        private async void login_register()
+        private async void openLogin()
         {
-           
+            //LoginWindow lw = new LoginWindow();
             bool loginAuthorized = false;
             bLogOut.IsEnabled = false;
             //this.Username = settingsManager.readSetting("account", "username");
             //this.Password = settingsManager.readSetting("account", "password");
-            
+            while (!loginAuthorized)
+            {
+                //lw.showLogin();
                 try
                 {
                     switch (waitResponse())
@@ -107,6 +109,7 @@ namespace clientWpf
                         bStart.IsEnabled = true;
                         loggedin = true;
                         updateStatus("Logged in");
+                        //StartSync_Click(null, null); // start sync
                     }
                 }
                 catch (Exception ex)
@@ -114,7 +117,7 @@ namespace clientWpf
                     this.ErrorMessage = ex.Message;
                     loginAuthorized = false;
                 }
-            
+            }
             bLogOut.IsEnabled = true;
         }
 
@@ -174,7 +177,7 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.LOGIN;
-            this.login_register();
+            this.openLogin();
 
         }
 
@@ -188,7 +191,7 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.REGISTER;
-            this.login_register();
+            this.openLogin();
 
         }
 
