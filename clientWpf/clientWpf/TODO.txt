@@ -1,0 +1,1 @@
+﻿1.	Controlla stampa di "ALL NOT WELL end terminated" in caso di registrazione. Legato a BadStop in ReceiveCommand
