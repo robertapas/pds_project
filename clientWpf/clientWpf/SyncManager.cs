@@ -108,7 +108,7 @@ namespace clientWpf
             // Send the data through the socket
             while (sCommand.Length > 0)
             {
-                //codifica in byte e invia
+                //codifica in byte e invia 
                 bytesSent = tcpClient.Send(Encoding.ASCII.GetBytes(sCommand));
                  // cat the message part already sent
                 sCommand = sCommand.Substring(bytesSent);
