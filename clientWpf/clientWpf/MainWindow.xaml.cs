@@ -58,9 +58,9 @@ namespace clientWpf
             }));
         }*/
 
-        private async void openLogin()
+        private async void login_register()
         {
-            //LoginWindow lw = new LoginWindow();
+
             bool loginAuthorized = false;
             bLogOut.IsEnabled = false;
             //this.Username = settingsManager.readSetting("account", "username");
@@ -176,7 +176,7 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.LOGIN;
-            this.openLogin();
+            this.login_register();
 
         }
 
@@ -190,7 +190,7 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.REGISTER;
-            this.openLogin();
+            this.login_register();
 
         }
 
