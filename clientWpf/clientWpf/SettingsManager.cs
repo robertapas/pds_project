@@ -25,7 +25,7 @@ namespace clientWpf
                 writer.WriteStartElement("settings");
                 writer.WriteStartElement("connection");
                 writer.WriteAttributeString("address", "127.0.0.1");
-                writer.WriteAttributeString("port", "55555");
+                writer.WriteAttributeString("port", "5555");
                 writer.WriteAttributeString("syncTime", "10");
                 writer.WriteEndElement();
                 writer.WriteStartElement("account");
