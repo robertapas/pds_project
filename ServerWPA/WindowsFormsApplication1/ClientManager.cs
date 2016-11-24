@@ -202,17 +202,17 @@ namespace WindowsFormsApplication1
                     case SyncCommand.CommandSet.LOGIN:
                         statusDelegate("Command -> LOGIN", fSyncServer.LOG_INFO);
                         return LoginUser();
-                    /*case SyncCommand.CommandSet.START:
+                    case SyncCommand.CommandSet.START:
                         statusDelegate(" Command -> START ", fSyncServer.LOG_INFO);
                         return StartSession();
-                    case SyncCommand.CommandSet.RESTORE:
+                    /*case SyncCommand.CommandSet.RESTORE:
                         statusDelegate("Command -> RESTORE", fSyncServer.LOG_INFO);
                         if (stateClient.userID == -1)
                         {
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return RestoreVersion();
+                        return RestoreVersion();*/
                     case SyncCommand.CommandSet.ENDSYNC:
                         statusDelegate("Command -> ENDSYNC", fSyncServer.LOG_INFO);
                         return EndSync();
@@ -242,7 +242,7 @@ namespace WindowsFormsApplication1
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return EditFile();*/
+                        return EditFile();
                     case SyncCommand.CommandSet.NEWUSER:
                         statusDelegate("Command -> NEWUSER", fSyncServer.LOG_INFO);
                         return NewUser();/*
