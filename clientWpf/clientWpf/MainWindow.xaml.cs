@@ -82,7 +82,7 @@ namespace clientWpf
                             loginAuthorized = await syncManager.login(tAddress.Text, Convert.ToInt32(tPort.Text), this.Username, this.Password, tDirectory.Text, true);
                             if (!loginAuthorized)
                             {
-                                this.ErrorMessage = "Registration faild";
+                                this.ErrorMessage = "Registration failed";
                             }
                             break;
                         default:
@@ -260,6 +260,35 @@ namespace clientWpf
             }
         }
 
+        private void bStart_Click(object sender, RoutedEventArgs e)
+        {
+            // start the sync manager
+            try
+            {
+                bStart.IsEnabled = false;
+                lVersions.Items.Clear();
+                syncManager.startSync(tAddress.Text, Int32.Parse(tPort.Text), tDirectory.Text, Int32.Parse(tTimeout.Text) * 1000);
+                bStop.IsEnabled = true;
+                bSyncNow.IsEnabled = true;
+                bGetVersions.IsEnabled = true;
+                tDirectory.IsEnabled = false;
+                tTimeout.IsEnabled = false;
+                bBrowse.IsEnabled = false;
+                tAddress.IsEnabled = false;
+                tPort.IsEnabled = false;
+                updateStatus("Started");
+                // Save settings
+                settingsManager.writeSetting("connection", "address", tAddress.Text);
+                settingsManager.writeSetting("connection", "port", tPort.Text);
+                settingsManager.writeSetting("account", "directory", tDirectory.Text);
+                settingsManager.writeSetting("connection", "syncTime", tTimeout.Text);
+            }
+            catch (Exception ex)
+            {
+                bStart.IsEnabled = true;
+                updateStatus(ex.Message);
+            }
+        }
 
         private void updateStatusBar(int percentage)
         {
