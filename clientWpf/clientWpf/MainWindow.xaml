@@ -59,7 +59,7 @@
                     <Label x:Name="lUsername" Content="User" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,10,0,0" Grid.Column="1"/>
                     <Label x:Name="lHello" Content="Hello" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" RenderTransformOrigin="-1.088,0.423" Grid.ColumnSpan="2"/>
                     <Button x:Name="bStart" Content="Start sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,47" IsEnabled="False" Grid.ColumnSpan="2" Click="bStart_Click"/>
-                    <Button x:Name="bStop" Content="Stop sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="72,0,0,47" IsEnabled="False" Grid.ColumnSpan="2" Grid.Column="1"/>
+                    <Button x:Name="bStop" Content="Stop sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="72,0,0,47" IsEnabled="False" Grid.ColumnSpan="2" Grid.Column="1" Click="StopSync_Click"/>
                     <Button x:Name="bSyncNow" Content="Sync now" Margin="288,0,28,47" Height="20" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="3"/>
 
                 </Grid>

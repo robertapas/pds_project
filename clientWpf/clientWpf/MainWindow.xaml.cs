@@ -290,6 +290,23 @@ namespace clientWpf
             }
         }
 
+        private void StopSync_Click(object sender, RoutedEventArgs e)
+        {
+            // stop the sync manager
+            try
+            {
+                lVersions.Items.Clear();
+                updateStatus("Stop");
+                forceStop();
+            }
+            catch (Exception ex)
+            {
+                bStop.IsEnabled = true;
+                bSyncNow.IsEnabled = true;
+                updateStatus(ex.Message);
+            }
+        }
+
         private void updateStatusBar(int percentage)
         {
             this.Dispatcher.BeginInvoke((Action)(() =>
