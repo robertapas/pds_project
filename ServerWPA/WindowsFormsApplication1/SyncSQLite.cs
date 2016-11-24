@@ -109,5 +109,76 @@ namespace WindowsFormsApplication1
             this.executeQuery("CREATE TABLE user_" + lastId + " (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, version INTEGER NOT NULL, server_file TEXT NOT NULL, client_file TEXT NOT NULL, checksum BLOB NOT NULL, timestamp TEXT NOT NULL);");
             return lastId;
         }
+
+        public Int64 checkUserDirectory(string username, string directory)
+        {
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM users WHERE username = @username", connection);
+            command.Parameters.AddWithValue("username", username);
+            SQLiteDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                string db_dir = (string)reader["user_dir"];
+                if (directory == db_dir)
+                {
+                    return (Int64)reader["id"];
+                }
+
+            }
+            return -1;
+        }
+
+        public Int64 getUserMinMaxVersion(Int64 userId, ref Int64 maxVersion)
+        {
+            SQLiteCommand command = new SQLiteCommand("SELECT IFNULL(MAX(version), 0) AS max_version, IFNULL(MIN(version), 0) AS min_version FROM user_" + userId, connection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                maxVersion = (Int64)reader["max_version"];
+                return (Int64)reader["min_version"];
+            }
+            else
+            {
+                maxVersion = -1;
+                return -1;
+            }
+        }
+
+        public List<FileChecksum> getUserFiles(Int64 userId, Int64 version, string serverBaseDir)
+        {
+            List<FileChecksum> userFiles = new List<FileChecksum>();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM user_" + userId + " WHERE version = @version;", connection);
+            command.Parameters.AddWithValue("version", version);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                userFiles.Add(new FileChecksum(serverBaseDir + (string)reader["server_file"], (string)reader["server_file"], (string)reader["client_file"], (byte[])reader["checksum"], version, (string)reader["timestamp"]));
+            }
+            reader.Close();
+            return userFiles;
+        }
+
+        public void setUserFiles(Int64 userId, Int64 version, List<FileChecksum> fileList)
+        {
+            SQLiteCommand command;
+            string current_timestamp = string.Format("{0:dd-MM-yyyy h-mm-ss-tt}", DateTime.Now);
+            foreach (FileChecksum file in fileList)
+            {
+                command = new SQLiteCommand("INSERT INTO user_" + userId + " (version, server_file, client_file, checksum, timestamp) VALUES (@version, @server_file, @client_file, @checksum, @timestamp);", connection);
+                command.Parameters.AddWithValue("version", version);
+                command.Parameters.AddWithValue("server_file", file.FileNameServerDB);
+                command.Parameters.AddWithValue("client_file", file.FileNameClient);
+                command.Parameters.AddWithValue("checksum", file.ChecksumBytes);
+                command.Parameters.AddWithValue("timestamp", current_timestamp);
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void deleteVersion(Int64 userId, Int64 version)
+        {
+            SQLiteCommand command = new SQLiteCommand("DELETE FROM user_" + userId + " WHERE version = @version;", connection);
+            command.Parameters.AddWithValue("version", version);
+            command.ExecuteNonQuery();
+        }
     }
 }

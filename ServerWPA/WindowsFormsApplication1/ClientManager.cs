@@ -376,6 +376,153 @@ namespace WindowsFormsApplication1
             }
         }
 
+        public Boolean StartSession()
+        {
+            Int64 userID = mySQLite.checkUserDirectory(stateClient.username, cmd.Directory); //Call DB Check Directory User
+            if (userID == -1)
+            {
+                //TODO: FRA e Ro, vedere gestione cartelle differenti
+                statusDelegate("[StartSession] User Directory Change NOT Authorized", fSyncServer.LOG_INFO);
+                statusDelegate("[StartSession] Send Back Unauthorized Message because the user change the root directory for the connection", fSyncServer.LOG_INFO);
+                SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.UNAUTHORIZED));
+                return true;
+            }
+            else
+            {
+                stateClient.userID = userID;
+                stateClient.directory = cmd.Directory;
+                Int64 lastVers = 0;
+                mySQLite.getUserMinMaxVersion(stateClient.userID, ref lastVers);
+                stateClient.version = lastVers; //Call DB Get Last Version
+                statusDelegate("[StartSession] User Directory Authorized, Start Send Check", fSyncServer.LOG_INFO);
+                SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.AUTHORIZED));
+                userChecksum = mySQLite.getUserFiles(stateClient.userID, stateClient.version, serverDir); //Call DB Get Users Files
+
+                foreach (FileChecksum check in userChecksum)
+                {
+                    SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECK, check.FileNameClient, check.Checksum.ToString()));
+                    statusDelegate("[StartSession] Send check Message", fSyncServer.LOG_INFO);
+                }
+                tempCheck.Clear();
+                statusDelegate("[StartSession] Send End check Message", fSyncServer.LOG_INFO);
+                SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ENDCHECK));
+                return true;
+            }
+
+
+        }
+
+        public Boolean NewFile()
+        {
+            string fileNameDB = Utility.FilePathWithVers(cmd.FileName, stateClient.version + 1);
+            ReceiveFile(serverDir + fileNameDB, cmd.FileSize);
+            statusDelegate("[NewFile] Received New File correcty", fSyncServer.LOG_INFO);
+            FileChecksum file = new FileChecksum(cmd.FileName, serverDir + fileNameDB, fileNameDB);
+            tempCheck.Add(file);
+            return true;
+        }
+
+        public void ReceiveFile(String fileName, Int64 fileLength)
+        {
+            byte[] buffer = new byte[1024];
+            int rec = 0;
+
+            if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+            }
+            BinaryWriter bFile = new BinaryWriter(File.Open(fileName, FileMode.Create));
+
+            // Receive data from the server
+            while (fileLength > 0)
+            {
+                rec = stateClient.workSocket.Receive(buffer);
+                fileLength -= rec;
+                bFile.Write(buffer, 0, rec);
+            }
+            bFile.Close();
+            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ACK));
+
+        }
+
+        public Boolean EditFile()
+        {
+            int index = userChecksum.FindIndex(x => x.FileNameClient == cmd.FileName);
+            userChecksum.RemoveAt(index);
+            statusDelegate("[EditFile] File Correctly Delete from the list of the files of the current Version", fSyncServer.LOG_INFO);
+            string fileNameDB = Utility.FilePathWithVers(cmd.FileName, stateClient.version + 1);
+            ReceiveFile(serverDir + fileNameDB, cmd.FileSize);
+            statusDelegate("[EditFile] Received File to Edit correcty", fSyncServer.LOG_INFO);
+            FileChecksum file = new FileChecksum(cmd.FileName, serverDir + fileNameDB, fileNameDB);
+            tempCheck.Add(file);
+            return true;
+        }
+
+        public Boolean DeleteFile()
+        {
+            int index = userChecksum.FindIndex(x => x.FileNameClient == cmd.FileName);
+            userChecksum.RemoveAt(index);
+            statusDelegate("[DeleteFile] File Correctly Delete from the list of the files of the current Version", fSyncServer.LOG_INFO);
+            return true;
+        }
+
+        public Boolean EndSync()
+        {
+            stateClient.version++;
+            foreach (FileChecksum check in userChecksum)
+            {
+                tempCheck.Add(check);
+            }
+            userChecksum.Clear();
+            mySQLite.setUserFiles(stateClient.userID, stateClient.version, tempCheck); // Call DB Update to new Version all the Files
+            tempCheck.Clear();
+            statusDelegate("[EndSync] DB Updated Correctly", fSyncServer.LOG_INFO);
+            CancelVersion();
+            WellStop();
+            return true;
+        }
+
+        public Boolean CancelVersion()
+        {
+
+            Int64 maxVers = 0;
+            Int64 minVers = mySQLite.getUserMinMaxVersion(stateClient.userID, ref maxVers);
+            Int64 diff = maxVers - minVers;
+            while (diff >= maxVersionNumber)
+            {
+                userChecksum = mySQLite.getUserFiles(stateClient.userID, minVers, serverDir); //Call DB Get Users Files;
+                minVers++;
+                tempCheck = mySQLite.getUserFiles(stateClient.userID, minVers, serverDir); //Call DB Get Users Files;
+                foreach (FileChecksum check in userChecksum)
+                {
+
+                    int index = tempCheck.FindIndex(x => x.FileNameServer == check.FileNameServer);
+
+                    if (index == -1)
+                    {
+                        File.Delete(check.FileNameServer);
+                        statusDelegate("Deleted File Correctly:" + check.FileNameServer, fSyncServer.LOG_INFO);
+                    }
+
+                }
+                mySQLite.deleteVersion(stateClient.userID, minVers - 1);
+                diff--;
+
+            }
+            userChecksum.Clear();
+            tempCheck.Clear();
+            return true;
+        }
+
+        public Boolean NoSync()
+        {
+            WellStop();
+            userChecksum.Clear();
+            tempCheck.Clear();
+            CancelVersion();
+            return true;
+        }
+
 
     }
 }
