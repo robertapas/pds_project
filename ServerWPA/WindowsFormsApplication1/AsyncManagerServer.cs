@@ -93,18 +93,12 @@ namespace WindowsFormsApplication1
             finally
             {
                 // Close socket and clients
-                
-                
-                foreach (ClientManager client in clients)
-                {
-                    if (client.getSyncEnd() == false)
-                        client.ForceWellStop();
-                    else client.WellStop();
-                }
-                Thread.Sleep(4000);
                 if (listener.Connected) listener.Close();
                 statusDelegate("Connection Closed", fSyncServer.LOG_INFO);
-                
+                foreach (ClientManager client in clients)
+                {
+                    client.WellStop();
+                }
 
             }
         }
@@ -126,12 +120,9 @@ namespace WindowsFormsApplication1
         public void stopSync()
         {
             serverStopped = true;
-            
-                 
-            listener.Close();            
-            listeningThread.Join();           
+            listener.Close();
+            listeningThread.Join();
             statusDelegate("Server stopped", fSyncServer.LOG_INFO);
-
         }
 
 

@@ -27,7 +27,6 @@ namespace WindowsFormsApplication1
         private SyncSQLite mySQLite;
         private String serverDir;
         private int maxVersionNumber;
-        private bool forceEnd = false;
 
         public ClientManager(Socket sock, String workDir, int maxVers, AsyncManagerServer.StatusDelegate sd)
         {
@@ -60,14 +59,6 @@ namespace WindowsFormsApplication1
         {
             syncEnd = true;
             wellEnd = false;
-        }
-
-        public void ForceWellStop()
-        {
-            // todo Cosa succede se sto sincronizzando? devo fare un restore?
-            syncEnd = true;
-            wellEnd = true;
-            forceEnd = true;
         }
 
         public void ReceiveCommand(Socket client)
@@ -186,7 +177,6 @@ namespace WindowsFormsApplication1
         public void doClientComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             // todo Cosa succede se sto sincronizzando? devo fare un restore?
-            SendCommand(getStateClient().workSocket, new SyncCommand(SyncCommand.CommandSet.STOP));
             stateClient.workSocket.Close();
             AsyncManagerServer.DecreaseClient();
             statusDelegate("Server Stopped ", fSyncServer.LOG_INFO);
@@ -302,15 +292,6 @@ namespace WindowsFormsApplication1
                 byte[] byteData = Encoding.ASCII.GetBytes(command.convertToString());
                 // Begin sending the data to the remote device.
                 handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler);
-            }
-
-            if (forceEnd)
-            {
-
-                byte[] byteData = Encoding.ASCII.GetBytes(command.convertToString());
-                // Begin sending the data to the remote device.
-                handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler);
-
             }
         }
 
@@ -482,7 +463,6 @@ namespace WindowsFormsApplication1
             int index = userChecksum.FindIndex(x => x.FileNameClient == cmd.FileName);
             userChecksum.RemoveAt(index);
             statusDelegate("[DeleteFile] File Correctly Delete from the list of the files of the current Version", fSyncServer.LOG_INFO);
-            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ACK));
             return true;
         }
 
@@ -543,13 +523,6 @@ namespace WindowsFormsApplication1
             return true;
         }
 
-        public StateObject getStateClient() {
-            return this.stateClient;
-        }
 
-        public Boolean getSyncEnd()
-        {
-            return syncEnd;
-        }
     }
 }
