@@ -9,7 +9,7 @@ namespace clientWpf
 {
     class SyncCommand
     {
-        public enum CommandSet { START, LOGIN, AUTHORIZED, UNAUTHORIZED, NEWUSER, EDIT, DEL, NEW, FILE, GET, RESTORE, ENDSYNC, CHECK, ENDCHECK, ACK, NOSYNC, VERSION, CHECKVERSION, GETVERSIONS, ENDRESTORE, FILEVERSIONS };
+        public enum CommandSet { START, LOGIN, AUTHORIZED, UNAUTHORIZED, NEWUSER, EDIT, DEL, NEW, FILE, GET, RESTORE, ENDSYNC, CHECK, ENDCHECK, ACK, NOSYNC, VERSION, CHECKVERSION, STOP, GETVERSIONS, ENDRESTORE, FILEVERSIONS };
         /*
 			 		TYPE	|  data[0]  |  data[1]  |  data[2]  |  data[3]  |
 			----------------+-----------+-----------+-----------+-----------+
@@ -34,6 +34,7 @@ namespace clientWpf
 		    GETVERSIONS     |			|			|			|			|
 		    ENDRESTORE      |			|			|			|			|
 		    FILEVERSIONS    | filename  |			|			|			|
+            STOP            |           |			|			|			|
 		 
 		 */
 

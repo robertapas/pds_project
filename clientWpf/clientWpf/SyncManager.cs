@@ -280,7 +280,11 @@ namespace clientWpf
 
             while ((sc = this.receiveCommand()).Type != SyncCommand.CommandSet.ENDCHECK)
             {
-                if (sc.Type != SyncCommand.CommandSet.CHECK) throw new Exception("Check list receive error");
+                if (sc.Type == SyncCommand.CommandSet.STOP) {
+                    statusDelegate("Server stopped", true);
+                    thread_stopped = true;
+                }
+                else if (sc.Type != SyncCommand.CommandSet.CHECK) throw new Exception("Check list receive error");
                 serverCheckList.Add(new FileChecksum(sc.FileName, Encoding.ASCII.GetBytes(sc.Checksum)));
             }
 
@@ -358,9 +362,16 @@ namespace clientWpf
             bFile.Close();
             //tcpClient.SendFile(path);
             statusBarDelegate(90);
-            if (receiveCommand().Type != SyncCommand.CommandSet.ACK)
+            SyncCommand sc;
+            if ((sc = this.receiveCommand()).Type != SyncCommand.CommandSet.ACK)
             {
-                statusDelegate("Error during file trasmission", true);
+                if (sc.Type == SyncCommand.CommandSet.STOP) {
+                    statusDelegate("Server was stopped. Ending syncing", true);
+                    thread_stopped = true;
+                }
+                else { 
+                    statusDelegate("Error during file trasmission", true);
+                }
             }
             statusBarDelegate(100);
         }
@@ -371,6 +382,20 @@ namespace clientWpf
             {
                 someChanges = true;
                 sendCommand(new SyncCommand(SyncCommand.CommandSet.DEL, currentFile.BaseFileName));
+                SyncCommand sc;
+                if ((sc = this.receiveCommand()).Type != SyncCommand.CommandSet.ACK)
+                {
+                    if (sc.Type == SyncCommand.CommandSet.STOP)
+                    {
+                        statusDelegate("Server was stopped. Ending syncing", true);
+                        thread_stopped = true;
+                    }
+                    else
+                    {
+                        statusDelegate("Cancellation failed", true);
+                    }
+                }
+
             }
         }
 
