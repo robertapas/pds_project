@@ -182,11 +182,13 @@ namespace WindowsFormsApplication1
             mySQLite.closeConnection();
             if (tempCheck.Count > 0)
             {
+                
                 foreach (FileChecksum check in tempCheck)
                 {
                     File.Delete(check.FileNameServer);
-                    statusDelegate("Delete File: " + check.FileNameServer, fSyncServer.LOG_WARNING);
+                    statusDelegate("Delete File: " + check.FileNameServer, fSyncServer.LOG_INFO);
                 }
+                statusDelegate("Rollback of incorrect synchronization completed", fSyncServer.LOG_INFO);
                 tempCheck.Clear();
             }
         }
@@ -269,6 +271,10 @@ namespace WindowsFormsApplication1
                             return false;
                         }
                         return GetFile();*/
+                    case SyncCommand.CommandSet.STOP:
+                        statusDelegate("Command -> STOP", fSyncServer.LOG_INFO);
+                        syncEnd = true ;
+                        return true;
                     default:
                         statusDelegate("Received Wrong Command", fSyncServer.LOG_ERROR);
                         badStop();
