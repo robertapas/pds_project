@@ -30,6 +30,7 @@ namespace clientWpf
         private int sync_sleeping_time = 5000;
         private System.Timers.Timer syncSleepTimer;
         private AutoResetEvent doSyncEvent;
+        private Boolean syncEnd = true;
 
         public SyncManager()
         {
@@ -72,6 +73,10 @@ namespace clientWpf
                     authorized = (this.receiveCommand().Type == SyncCommand.CommandSet.AUTHORIZED);
                     tcpClient.Close();
                     statusBarDelegate(100);
+                }
+                catch(SocketException se)
+                {
+                    ex = se;
                 }
                 catch (Exception exx)
                 {
@@ -128,12 +133,34 @@ namespace clientWpf
             while ((jsonEnd = SyncCommand.searchJsonEnd(receivedBuffer)) == -1)
             {
                 // Receive data from the server
+
+                if (!SocketConnected(tcpClient)){
+                    if(syncEnd == false)
+                    {
+                        statusDelegate("Server is not responding. Stop syncing.");
+                        stopSync();
+                        return null;
+                    }
+                    statusDelegate("Server is not responding");
+                }
                 dataRec = tcpClient.Receive(data);
                 receivedBuffer += Encoding.ASCII.GetString(data, 0, dataRec);
+                
             }
             sc = SyncCommand.convertFromString(receivedBuffer.Substring(0, jsonEnd + 1));
             receivedBuffer = receivedBuffer.Substring(jsonEnd + 1);
             return sc;
+        }
+
+        public Boolean SocketConnected(Socket s)
+        {
+            //determina lo stato del socket
+            bool part1 = s.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (s.Available == 0); //se ha ricevuto qualcosa o meno
+            if (part1 && part2)
+                return false;
+            else
+                return true;
         }
 
 
@@ -208,6 +235,7 @@ namespace clientWpf
             try
             {
                 // Do syncking
+                syncEnd = false;
                 while (!thread_stopped)
                 {
                     connectionMutex.WaitOne();
@@ -243,6 +271,7 @@ namespace clientWpf
                     // commit changes
                     statusBarDelegate(90);
                     commitChangesToServer(someChanges);
+                    syncEnd = true;
                     statusBarDelegate(100);
                     // close connection
                     tcpClient.Close();

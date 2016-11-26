@@ -175,11 +175,10 @@ namespace WindowsFormsApplication1
         }
 
         public void doClientComplete(object sender, RunWorkerCompletedEventArgs e)
-        {
-            // todo Cosa succede se sto sincronizzando? devo fare un restore?
+        {       
             stateClient.workSocket.Close();
             AsyncManagerServer.DecreaseClient();
-            statusDelegate("Server Stopped ", fSyncServer.LOG_INFO);
+            //statusDelegate("Server Stopped ", fSyncServer.LOG_INFO);
             mySQLite.closeConnection();
             if (tempCheck.Count > 0)
             {
