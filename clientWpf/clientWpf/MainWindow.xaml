@@ -92,7 +92,7 @@
                     <Button Name="bGetVersions" Content="Get versions" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,10" IsEnabled="False" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tpSettings" Header="Settings" IsEnabled="False">
+            <TabItem x:Name="tpSettings" Header="Settings" IsEnabled="False" HorizontalAlignment="Right" Margin="-2.2,-2,-2.4,0" Width="59">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                         <GradientStop Color="#FFF0F0F0" Offset="0"/>
