@@ -90,9 +90,10 @@ namespace clientWpf
 
         public void stopSync()
         {
+
             try
             {
-                if (tcpClient.Connected)
+               if (tcpClient.Connected)
                 {
                     this.sendCommand(new SyncCommand(SyncCommand.CommandSet.STOP));
 
@@ -104,7 +105,6 @@ namespace clientWpf
                 statusDelegate("[stopSync]: " + e.Message);
             }
             //Thread.Sleep(4000);
-           
             this.thread_stopped = true;
             // Release the socket.
             
