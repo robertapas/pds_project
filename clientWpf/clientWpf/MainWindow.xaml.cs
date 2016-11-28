@@ -168,6 +168,8 @@ namespace clientWpf
 
         private void LogIn_Click(object sender, RoutedEventArgs e)
         {
+            lbStatus.Items.Clear();
+            lbStatus.Items.Refresh();
             username = tUsername.Text;
             password = tPassword.Password;
             if (username == "" || password == "")
@@ -200,6 +202,9 @@ namespace clientWpf
             {
                 forceStop();
                 lUsername.Content = "";
+                lbStatus.Items.Clear();
+                lbStatus.Items.Refresh();
+
                 loggedin = false;
                 tpLogin.IsSelected = true;
                 tpHome.IsEnabled = false;
