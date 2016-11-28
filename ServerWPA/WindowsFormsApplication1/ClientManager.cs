@@ -420,14 +420,18 @@ namespace WindowsFormsApplication1
         public Boolean NewFile()
         {
             string fileNameDB = Utility.FilePathWithVers(cmd.FileName, stateClient.version + 1);
-            ReceiveFile(serverDir + fileNameDB, cmd.FileSize);
+            if (!ReceiveFile(serverDir + fileNameDB, cmd.FileSize))
+            {
+                statusDelegate("[NewFile] Error Receiving File", fSyncServer.LOG_ERROR);
+                return false;
+            }
             statusDelegate("[NewFile] Received New File correcty", fSyncServer.LOG_INFO);
             FileChecksum file = new FileChecksum(cmd.FileName, serverDir + fileNameDB, fileNameDB);
             tempCheck.Add(file);
             return true;
         }
 
-        public void ReceiveFile(String fileName, Int64 fileLength)
+        public Boolean ReceiveFile(String fileName, Int64 fileLength)
         {
             byte[] buffer = new byte[1024];
             int rec = 0;
@@ -436,18 +440,30 @@ namespace WindowsFormsApplication1
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fileName));
             }
-            BinaryWriter bFile = new BinaryWriter(File.Open(fileName, FileMode.Create));
+            FileStream fp = File.Open(fileName, FileMode.Create);
+            BinaryWriter bFile = new BinaryWriter(fp);
 
             // Receive data from the server
             while (fileLength > 0)
             {
-                rec = stateClient.workSocket.Receive(buffer);
-                fileLength -= rec;
-                bFile.Write(buffer, 0, rec);
+                if (!SocketConnected(stateClient.workSocket))
+                {
+
+                    bFile.Close();
+                    File.Delete(fileName);
+                    badStop();
+                    return false;
+                    
+                }else
+                {
+                    rec = stateClient.workSocket.Receive(buffer);
+                    fileLength -= rec;
+                    bFile.Write(buffer, 0, rec);
+                }
             }
             bFile.Close();
             SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ACK));
-
+            return true;
         }
 
         public Boolean EditFile()
@@ -456,7 +472,14 @@ namespace WindowsFormsApplication1
             userChecksum.RemoveAt(index);
             statusDelegate("[EditFile] File Correctly Delete from the list of the files of the current Version", fSyncServer.LOG_INFO);
             string fileNameDB = Utility.FilePathWithVers(cmd.FileName, stateClient.version + 1);
-            ReceiveFile(serverDir + fileNameDB, cmd.FileSize);
+
+            if (!ReceiveFile(serverDir + fileNameDB, cmd.FileSize))
+            {
+                statusDelegate("[EditFile] Error receiving File to Edit", fSyncServer.LOG_ERROR);
+                badStop();
+                return false;
+            }
+
             statusDelegate("[EditFile] Received File to Edit correcty", fSyncServer.LOG_INFO);
             FileChecksum file = new FileChecksum(cmd.FileName, serverDir + fileNameDB, fileNameDB);
             tempCheck.Add(file);

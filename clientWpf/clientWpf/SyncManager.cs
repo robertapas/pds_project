@@ -91,7 +91,7 @@ namespace clientWpf
         public void stopSync()
         {
 
-            try
+           /* try
             {
                if (tcpClient.Connected)
                 {
@@ -103,8 +103,9 @@ namespace clientWpf
             catch (Exception e)
             {
                 statusDelegate("[stopSync]: " + e.Message);
-            }
+            }*/
             //Thread.Sleep(4000);
+
             this.thread_stopped = true;
             // Release the socket.
             
@@ -290,7 +291,7 @@ namespace clientWpf
                     syncEnd = true;
                     statusBarDelegate(100);
                     // close connection
-                    //tcpClient.Close();
+                    tcpClient.Close();
                     statusDelegate("Idle");
                     connectionMutex.ReleaseMutex();
 
