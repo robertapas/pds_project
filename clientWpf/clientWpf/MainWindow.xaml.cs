@@ -212,15 +212,7 @@ namespace clientWpf
 
         }
 
-        /*private void Window_Closed(object sender, EventArgs e)
-        {
-            this.Hide();
-        }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            FocusManager.SetFocusedElement(this, tUsername);
-        }*/
 
         private void forceStop()
         {
