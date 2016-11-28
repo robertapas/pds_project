@@ -184,6 +184,8 @@ namespace clientWpf
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
+            lbStatus.Items.Clear();
+            lbStatus.Items.Refresh();
             username = tUsername.Text;
             password = tPassword.Password;
             if (username == "" || password == "")
