@@ -90,19 +90,10 @@ namespace clientWpf
 
         public void stopSync()
         {
-            try
-            {
-                if (tcpClient.Connected)
-                {
-                    this.sendCommand(new SyncCommand(SyncCommand.CommandSet.STOP));
-
-                }
-                else statusDelegate("Cannot send STOP. tcpClient connected");
-            }catch (Exception e)
-            {
-                statusDelegate("[stopSync]: "+e.Message);
-            }
-            //Thread.Sleep(4000);
+            
+            this.sendCommand(new SyncCommand(SyncCommand.CommandSet.STOP));
+            
+            Thread.Sleep(4000);
             this.thread_stopped = true;
             // Release the socket.
             
@@ -114,7 +105,6 @@ namespace clientWpf
             }
             if (syncThread != null && syncThread.IsAlive)
             {
-                statusDelegate("Abort Syncthread");
                 syncThread.Abort(); // TODO evitare di usare Abort
             }
         }
@@ -289,7 +279,7 @@ namespace clientWpf
                     syncEnd = true;
                     statusBarDelegate(100);
                     // close connection
-                    //tcpClient.Close();
+                    tcpClient.Close();
                     statusDelegate("Idle");
                     connectionMutex.ReleaseMutex();
 
