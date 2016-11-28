@@ -176,8 +176,6 @@ namespace clientWpf
                 return;
             }
             lastResponse = LoginResponse.LOGIN;
-            
-
             this.login_register();
 
         }
@@ -203,13 +201,6 @@ namespace clientWpf
                 forceStop();
                 lUsername.Content = "";
                 loggedin = false;
-                lbStatus.Items.Clear();
-                /*while (lbStatus.Items.Count > 0)
-                {
-                    lbStatus.Items.Remove(0);
-                }
-                lbStatus.Items.Clear();*/
-                
                 tpLogin.IsSelected = true;
                 tpHome.IsEnabled = false;
                 tpSettings.IsEnabled = false;
