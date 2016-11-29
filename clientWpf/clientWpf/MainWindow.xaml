@@ -8,10 +8,9 @@
         Title="SyncBox" Height="403" Width="601" Icon="Synchronize.png" BorderThickness="0" Background="#FFDEEEEB" BorderBrush="Black">
     <Grid Margin="0,10,-6.6,-0.2">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="19*"/>
-            <ColumnDefinition Width="281*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TabControl Margin="0,0,9.6,30.2" HorizontalAlignment="Right" Width="588" Grid.ColumnSpan="2">
+        <TabControl Margin="0,0,10,30.2" HorizontalAlignment="Right" Width="588">
             <TabItem x:Name="tpLogin" Header="LogIn" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="55" IsSelected="True">
                 <TabItem.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
@@ -46,21 +45,18 @@
                 </TabItem.Background>
                 <Grid Background="White" Margin="10,0,0,-2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="18*"/>
-                        <ColumnDefinition Width="115*"/>
-                        <ColumnDefinition Width="48*"/>
-                        <ColumnDefinition Width="391*"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="bLogOut" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="306,10,0,0" Click="LogOut_Click" Grid.Column="3"/>
-                    <Label Content="Your Directory:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0" Grid.ColumnSpan="2"/>
-                    <TextBox Name="tDirectory" Text="C:\prova" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,71,74,0" Grid.ColumnSpan="4"/>
-                    <Button Name="bBrowse" Content="..." HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" RenderTransformOrigin="3.136,8.118" Margin="0,71,28,0" Height="23" Click="Browse_Click" Grid.Column="3"/>
-                    <ListBox x:Name="lbStatus" HorizontalAlignment="Left" Height="117" Margin="10,113,0,0" VerticalAlignment="Top" Width="534" Grid.ColumnSpan="4"/>
-                    <Label x:Name="lUsername" Content="User" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,10,0,0" Grid.Column="1"/>
-                    <Label x:Name="lHello" Content="Hello" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" RenderTransformOrigin="-1.088,0.423" Grid.ColumnSpan="2"/>
-                    <Button x:Name="bStart" Content="Start sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,47" IsEnabled="False" Grid.ColumnSpan="2" Click="bStart_Click"/>
-                    <Button x:Name="bStop" Content="Stop sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="72,0,0,47" IsEnabled="False" Grid.ColumnSpan="2" Grid.Column="1" Click="StopSync_Click"/>
-                    <Button x:Name="bSyncNow" Content="Sync now" Margin="288,0,28,47" Height="20" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="3" Click="bSyncNow_Click"/>
+                    <Button x:Name="bLogOut" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="487,10,0,0" Click="LogOut_Click"/>
+                    <Label Content="Your Directory:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0"/>
+                    <TextBox Name="tDirectory" Text="C:\prova" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,71,74,0"/>
+                    <Button Name="bBrowse" Content="..." HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" RenderTransformOrigin="3.136,8.118" Margin="0,71,28,0" Height="23" Click="Browse_Click"/>
+                    <ListBox x:Name="lbStatus" HorizontalAlignment="Left" Height="117" Margin="10,113,0,0" VerticalAlignment="Top" Width="534"/>
+                    <Label x:Name="lUsername" Content="User" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="48,10,0,0"/>
+                    <Label x:Name="lHello" Content="Hello" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" RenderTransformOrigin="-1.088,0.423"/>
+                    <Button x:Name="bStart" Content="Start sync" VerticalAlignment="Bottom" Margin="10,0,487,47" IsEnabled="False" Click="bStart_Click"/>
+                    <Button x:Name="bStop" Content="Stop sync" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="90,0,0,47" IsEnabled="False" Click="StopSync_Click"/>
+                    <Button x:Name="bSyncNow" Content="Sync now" Margin="469,0,28,47" Height="20" VerticalAlignment="Bottom" IsEnabled="False" Click="bSyncNow_Click"/>
 
                 </Grid>
             </TabItem>
@@ -71,7 +67,7 @@
                         <GradientStop Color="White" Offset="1"/>
                     </LinearGradientBrush>
                 </TabItem.Background>
-                <Grid Background="White" Margin="10,0,0,-3">
+                <Grid Background="White" Margin="0,0,0,-3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="66*"/>
                         <ColumnDefinition Width="141*"/>
@@ -114,10 +110,10 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <StatusBar Height="20" VerticalAlignment="Bottom" Margin="2,0,10,5.2" Grid.ColumnSpan="2">
-            <StatusBarItem x:Name="lStatus" Content="Status" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,-5"/>
+        <StatusBar Height="20" VerticalAlignment="Bottom" Margin="2,0,10,5.2">
+            <StatusBarItem x:Name="lStatus" Content="Ready" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,-5"/>
             <StatusBarItem HorizontalAlignment="Right">
-                <ProgressBar x:Name="lStatusBar" Value="0" Width="100" Height="12" VerticalAlignment="Center"/>
+                <ProgressBar x:Name="lStatusBar" Value="0" Width="100" Height="12" VerticalAlignment="Center" Foreground="#FF065BB0"/>
             </StatusBarItem>
         </StatusBar>
 

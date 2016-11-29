@@ -66,7 +66,7 @@
             this.tabControl1.Controls.Add(this.tSettings);
             this.tabControl1.Controls.Add(this.tVersions);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(686, 316);
@@ -88,9 +88,9 @@
             this.tSettings.Controls.Add(this.lPort);
             this.tSettings.Controls.Add(this.nPort);
             this.tSettings.Location = new System.Drawing.Point(4, 22);
-            this.tSettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tSettings.Margin = new System.Windows.Forms.Padding(2);
             this.tSettings.Name = "tSettings";
-            this.tSettings.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tSettings.Padding = new System.Windows.Forms.Padding(2);
             this.tSettings.Size = new System.Drawing.Size(678, 290);
             this.tSettings.TabIndex = 0;
             this.tSettings.Text = "Settings";
@@ -100,7 +100,7 @@
             // nUDVersion
             // 
             this.nUDVersion.Location = new System.Drawing.Point(132, 99);
-            this.nUDVersion.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nUDVersion.Margin = new System.Windows.Forms.Padding(2);
             this.nUDVersion.Minimum = new decimal(new int[] {
             5,
             0,
@@ -147,7 +147,7 @@
             // bStop
             // 
             this.bStop.Location = new System.Drawing.Point(129, 244);
-            this.bStop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bStop.Margin = new System.Windows.Forms.Padding(2);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(56, 19);
             this.bStop.TabIndex = 8;
@@ -158,7 +158,7 @@
             // bStart
             // 
             this.bStart.Location = new System.Drawing.Point(25, 244);
-            this.bStart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bStart.Margin = new System.Windows.Forms.Padding(2);
             this.bStart.Name = "bStart";
             this.bStart.Size = new System.Drawing.Size(56, 19);
             this.bStart.TabIndex = 7;
@@ -169,8 +169,9 @@
             // lbLog
             // 
             this.lbLog.FormattingEnabled = true;
+            this.lbLog.HorizontalScrollbar = true;
             this.lbLog.Location = new System.Drawing.Point(25, 155);
-            this.lbLog.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lbLog.Margin = new System.Windows.Forms.Padding(2);
             this.lbLog.Name = "lbLog";
             this.lbLog.Size = new System.Drawing.Size(618, 69);
             this.lbLog.TabIndex = 6;
@@ -198,7 +199,7 @@
             // bBrowse
             // 
             this.bBrowse.Location = new System.Drawing.Point(587, 65);
-            this.bBrowse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bBrowse.Margin = new System.Windows.Forms.Padding(2);
             this.bBrowse.Name = "bBrowse";
             this.bBrowse.Size = new System.Drawing.Size(56, 19);
             this.bBrowse.TabIndex = 3;
@@ -209,7 +210,7 @@
             // tDirectory
             // 
             this.tDirectory.Location = new System.Drawing.Point(132, 65);
-            this.tDirectory.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tDirectory.Margin = new System.Windows.Forms.Padding(2);
             this.tDirectory.Name = "tDirectory";
             this.tDirectory.Size = new System.Drawing.Size(452, 20);
             this.tDirectory.TabIndex = 2;
@@ -228,7 +229,7 @@
             // nPort
             // 
             this.nPort.Location = new System.Drawing.Point(22, 34);
-            this.nPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nPort.Margin = new System.Windows.Forms.Padding(2);
             this.nPort.Maximum = new decimal(new int[] {
             60000,
             0,
@@ -246,7 +247,7 @@
             this.tVersions.Controls.Add(this.lvVersions);
             this.tVersions.Controls.Add(this.lvUsers);
             this.tVersions.Location = new System.Drawing.Point(4, 22);
-            this.tVersions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tVersions.Margin = new System.Windows.Forms.Padding(2);
             this.tVersions.Name = "tVersions";
             this.tVersions.Size = new System.Drawing.Size(678, 290);
             this.tVersions.TabIndex = 2;
@@ -342,7 +343,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 320);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "fSyncServer";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.fSyncServer_Load);

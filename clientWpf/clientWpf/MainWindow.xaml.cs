@@ -127,6 +127,8 @@ namespace clientWpf
             ListBoxItem lbi = new ListBoxItem();
             lbi.Content = newStatus;
             lbStatus.Items.Add(lbi);
+            lbStatus.SelectedIndex = lbStatus.Items.Count - 1;
+            lbStatus.ScrollIntoView(lbStatus.SelectedIndex);
         }
 
         public LoginResponse waitResponse()
@@ -352,9 +354,9 @@ namespace clientWpf
             }
         }
 
-    
+  
 
-    private void bSyncNow_Click(object sender, RoutedEventArgs e)
+        private void bSyncNow_Click(object sender, RoutedEventArgs e)
     {
             syncManager.forceSync();
     }
