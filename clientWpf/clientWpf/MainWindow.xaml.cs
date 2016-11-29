@@ -311,5 +311,12 @@ namespace clientWpf
                 lStatusBar.Value = percentage;
             }));
         }
+
+        private void bSyncNow_Click(object sender, RoutedEventArgs e)
+        {
+            syncManager.forceSync();
+        }
+
+        
     }
 }

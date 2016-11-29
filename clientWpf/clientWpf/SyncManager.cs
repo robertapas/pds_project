@@ -430,6 +430,11 @@ namespace clientWpf
             clientFileChecksum.Clear();
         }
 
+        public void forceSync()
+        {
+            doSyncEvent.Set();
+        }
+
     }
 
     

@@ -65,5 +65,7 @@ namespace clientWpf
             reader.Close();
             return value;
         }
+
+       
     }
 }
