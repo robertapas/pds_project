@@ -254,7 +254,7 @@ namespace WindowsFormsApplication1
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return GetVersions();/*
+                        return GetVersions();
                     case SyncCommand.CommandSet.FILEVERSIONS:
                         statusDelegate("Command -> FILEVERSIONS", fSyncServer.LOG_INFO);
                         if (stateClient.userID == -1)
@@ -262,7 +262,7 @@ namespace WindowsFormsApplication1
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return GetFileVersions();
+                        return GetFileVersions();/*
                     case SyncCommand.CommandSet.GET:
                         statusDelegate("Command -> GET", fSyncServer.LOG_INFO);
                         if (stateClient.userID == -1)
@@ -548,6 +548,37 @@ namespace WindowsFormsApplication1
             userChecksum.Clear();
             tempCheck.Clear();
             CancelVersion();
+            return true;
+        }
+
+        public Boolean GetFileVersions()
+        {
+            userChecksum = mySQLite.getFileVersions(stateClient.userID, cmd.FileName, serverDir); //Call DB Get User Files Version;
+            bool first = true;
+            FileChecksum temp = null;
+            foreach (FileChecksum check in userChecksum)
+            {
+                if (first)
+                {
+                    SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, check.FileNameClient, "NEW", check.Timestamp, check.Version.ToString()));
+                    first = false;
+                }
+                else if (temp != null && (Encoding.ASCII.GetString(check.ChecksumBytes) == Encoding.ASCII.GetString(temp.ChecksumBytes)))
+                {
+                    SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, check.FileNameClient, "NONE", check.Timestamp, check.Version.ToString()));
+                }
+                else if (temp != null)
+                {
+                    SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, check.FileNameClient, "EDIT", check.Timestamp, check.Version.ToString()));
+                }
+                statusDelegate("[GetFileVersions] Send checkVers Message", fSyncServer.LOG_INFO);
+                temp = check;
+
+            }
+            userChecksum.Clear();
+            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ENDCHECK));
+            statusDelegate("[GetFileVersions] Send End check Message", fSyncServer.LOG_INFO);
+            WellStop();
             return true;
         }
 
