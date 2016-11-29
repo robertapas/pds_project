@@ -174,6 +174,20 @@ namespace WindowsFormsApplication1
 
         }
 
+        public List<FileChecksum> getFileVersions(Int64 userId, string filename, string serverBaseDir)
+        {
+            List<FileChecksum> userFiles = new List<FileChecksum>();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM user_" + userId + " WHERE client_file = @filename;", connection);
+            command.Parameters.AddWithValue("filename", filename);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                userFiles.Add(new FileChecksum(serverBaseDir + (string)reader["server_file"], (string)reader["server_file"], (string)reader["client_file"], (byte[])reader["checksum"], (Int64)reader["version"], (string)reader["timestamp"]));
+            }
+            reader.Close();
+            return userFiles;
+        }
+
         public void deleteVersion(Int64 userId, Int64 version)
         {
             SQLiteCommand command = new SQLiteCommand("DELETE FROM user_" + userId + " WHERE version = @version;", connection);

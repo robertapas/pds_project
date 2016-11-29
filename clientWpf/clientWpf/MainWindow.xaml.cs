@@ -30,6 +30,7 @@ namespace clientWpf
         private bool loggedin = false;
         private SyncManager syncManager;
         private SettingsManager settingsManager;
+        List<Version> versions = null;
 
         public MainWindow()
         {
@@ -312,11 +313,69 @@ namespace clientWpf
             }));
         }
 
-        private void bSyncNow_Click(object sender, RoutedEventArgs e)
+        private void lVersions_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            syncManager.forceSync();
+            DependencyObject obj = (DependencyObject)e.OriginalSource;
+            while (obj != null && obj != lVersions)
+            {
+                if (obj.GetType() == typeof(System.Windows.Controls.ListViewItem))
+                {
+                    VersionDetailsWindow vdw = new VersionDetailsWindow(versions[lVersions.SelectedIndex], syncManager);
+                    vdw.Show();
+                    break;
+                }
+                obj = VisualTreeHelper.GetParent(obj);
+            }
         }
 
+        private async void bGetVersions_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                bGetVersions.IsEnabled = false;
+                lVersions.Items.Clear();
+                lVersions.Items.Refresh();
+                versions = await syncManager.getVersions();
+                foreach (Version version in versions)
+                {
+                    lVersions.Items.Add(new VersionsListViewItem(version.VersionNum, version.NewFiles, version.EditFiles, version.DelFiles, version.Timestamp));
+                }
+                lVersions.SelectedIndex = 0;
+
+                bGetVersions.IsEnabled = true;
+                bRestore.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                bGetVersions.IsEnabled = true;
+                updateStatus(ex.Message);
+            }
+        }
+
+    
+
+    private void bSyncNow_Click(object sender, RoutedEventArgs e)
+    {
+            syncManager.forceSync();
+    }
+
         
+    }
+
+    class VersionsListViewItem
+    {
+        public String sVersion { get; set; }
+        public String sNewFiles { get; set; }
+        public String sEditFiles { get; set; }
+        public String sDelFiles { get; set; }
+        public String sDateTime { get; set; }
+        public VersionsListViewItem(Int64 version, int newFiles, int editFiles, int delFiles, String dateTime)
+        {
+            sVersion = version.ToString();
+            sNewFiles = newFiles.ToString();
+            sEditFiles = editFiles.ToString();
+            sDelFiles = delFiles.ToString();
+            sDateTime = dateTime;
+        }
     }
 }

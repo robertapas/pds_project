@@ -246,7 +246,7 @@ namespace WindowsFormsApplication1
                         return EditFile();
                     case SyncCommand.CommandSet.NEWUSER:
                         statusDelegate("Command -> NEWUSER", fSyncServer.LOG_INFO);
-                        return NewUser();/*
+                        return NewUser();
                     case SyncCommand.CommandSet.GETVERSIONS:
                         statusDelegate("Command -> GETVERSIONS", fSyncServer.LOG_INFO);
                         if (stateClient.userID == -1)
@@ -254,7 +254,7 @@ namespace WindowsFormsApplication1
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return GetVersions();
+                        return GetVersions();/*
                     case SyncCommand.CommandSet.FILEVERSIONS:
                         statusDelegate("Command -> FILEVERSIONS", fSyncServer.LOG_INFO);
                         if (stateClient.userID == -1)
@@ -548,6 +548,87 @@ namespace WindowsFormsApplication1
             userChecksum.Clear();
             tempCheck.Clear();
             CancelVersion();
+            return true;
+        }
+
+        public Boolean GetVersions()
+        {
+            bool first = true;
+            Int64 lastVers = 0;
+            Int64 currentVersion = mySQLite.getUserMinMaxVersion(stateClient.userID, ref lastVers);
+            Int64 diff = lastVers - currentVersion + 1;
+            if ((lastVers == 0) || (currentVersion == 0))
+                diff = 0;
+
+            List<FileChecksum> userChecksumA = mySQLite.getUserFiles(stateClient.userID, currentVersion, serverDir); //Call DB Get Users Files;
+            while (diff > 0)
+            {
+                statusDelegate("[GetVersions] Send Version Message", fSyncServer.LOG_INFO);
+                SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.VERSION, currentVersion.ToString(), userChecksumA.Count.ToString(), userChecksumA[0].Timestamp));
+
+                if (first)
+                {
+                    foreach (FileChecksum check in userChecksumA)
+                    {
+                        statusDelegate("[GetVersions] Send check Version Message", fSyncServer.LOG_INFO);
+                        SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, check.FileNameClient, "NEW", check.Timestamp, check.Version.ToString()));
+                    }
+                    first = false;
+                }
+                else
+                {
+                    List<FileChecksum> userChecksumB = mySQLite.getUserFiles(stateClient.userID, currentVersion, serverDir); //Call DB Get Users Files;
+
+                    foreach (FileChecksum checkB in userChecksumB)
+                    {
+                        Boolean found = false;
+                        foreach (FileChecksum checkA in userChecksumA)
+                        {
+
+                            if (checkA.FileNameClient == checkB.FileNameClient)
+                                if (checkA.FileNameServer == checkB.FileNameServer)
+                                {
+                                    statusDelegate("[GetVersions] Send checkVers Message", fSyncServer.LOG_INFO);
+                                    SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, checkA.FileNameClient, "NONE", checkA.Timestamp, checkA.Version.ToString()));
+                                    found = true;
+                                    userChecksumA.Remove(checkA);
+                                    break;
+                                }
+                                else
+                                {
+                                    statusDelegate("[GetVersions] Send checkVers Message", fSyncServer.LOG_INFO);
+                                    SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, checkA.FileNameClient, "EDIT", checkA.Timestamp, checkA.Version.ToString()));
+                                    found = true;
+                                    userChecksumA.Remove(checkA);
+                                    break;
+                                }
+                        }
+
+
+                        if (!found)
+                        {
+                            statusDelegate("[GetVersions] Send checkVers Message", fSyncServer.LOG_INFO);
+                            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, checkB.FileNameClient, "NEW", checkB.Timestamp, checkB.Version.ToString()));
+                        }
+                    }
+
+                    if (userChecksumA.Count != 0)
+                    {
+                        foreach (FileChecksum checkA in userChecksumA)
+                        {
+                            statusDelegate("[GetVersions] Send check Message", fSyncServer.LOG_INFO);
+                            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.CHECKVERSION, checkA.FileNameClient, "DEL", checkA.Timestamp, checkA.Version.ToString()));
+                        }
+                    }
+                    userChecksumA = userChecksumB;
+                }
+                diff--;
+                currentVersion++;
+
+            }
+            statusDelegate("[GetVersions] Send End check Message", fSyncServer.LOG_INFO);
+            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ENDCHECK));
+            WellStop();
             return true;
         }
 

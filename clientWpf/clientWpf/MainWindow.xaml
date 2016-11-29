@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:clientWpf"
         mc:Ignorable="d"
-        Title="SyncBox" Height="403" Width="601" BorderThickness="0" Background="#FFDEEEEB" BorderBrush="Black">
+        Title="SyncBox" Height="403" Width="601" Icon="Synchronize.png" BorderThickness="0" Background="#FFDEEEEB" BorderBrush="Black">
     <Grid Margin="0,10,-6.6,-0.2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
@@ -33,7 +33,7 @@
                     <PasswordBox Name="tPassword" VerticalAlignment="Top" Height="23" Margin="107,74,190,0" Grid.ColumnSpan="2" UseLayoutRounding="True" Grid.Column="1"/>
                     <Button x:Name="bLogIn" Content="LogIn" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="107,117,0,0" Click="LogIn_Click" Grid.ColumnSpan="2" UseLayoutRounding="True" Grid.Column="1"/>
                     <Button Content="Register" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="65,117,0,0" Click="Register_Click" Grid.Column="2" UseLayoutRounding="True"/>
-                    <TextBox x:Name="lError" Grid.ColumnSpan="2" Height="45" Margin="106,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="199" FontWeight="Bold" Foreground="#FFEC0404" BorderThickness="0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Grid.Column="1"/>
+                    <TextBox x:Name="lError" Grid.ColumnSpan="2" Height="133" Margin="106,154,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="199" FontWeight="Bold" Foreground="#FFEC0404" BorderThickness="0" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Grid.Column="1"/>
                     <!--CheckBox Name="cbKeep" Content="Keep me logged in" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,123,0,0" IsChecked="True"/-->
                 </Grid>
             </TabItem>
@@ -77,7 +77,7 @@
                         <ColumnDefinition Width="141*"/>
                         <ColumnDefinition Width="365*"/>
                     </Grid.ColumnDefinitions>
-                    <ListView Name="lVersions" Margin="10,10,10,35" SelectionMode="Single" Grid.ColumnSpan="3">
+                    <ListView Name="lVersions" Margin="10,10,10,35" SelectionMode="Single" Grid.ColumnSpan="3" MouseDoubleClick="lVersions_MouseDoubleClick">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Version" Width="60" DisplayMemberBinding="{Binding sVersion}"/>
@@ -89,7 +89,7 @@
                         </ListView.View>
                     </ListView>
                     <Button Name="bRestore" Content="Restore" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="0,0,10,10" IsEnabled="False" Grid.Column="2"/>
-                    <Button Name="bGetVersions" Content="Get versions" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,10" IsEnabled="False" Grid.ColumnSpan="2"/>
+                    <Button Name="bGetVersions" Content="Get versions" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="10,0,0,10" IsEnabled="False" Grid.ColumnSpan="2" Click="bGetVersions_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tpSettings" Header="Settings" IsEnabled="False" HorizontalAlignment="Right" Margin="-2.2,-2,-2.4,0" Width="59">
