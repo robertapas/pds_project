@@ -691,7 +691,7 @@ namespace WindowsFormsApplication1
                 if (File.Exists(check.FileNameServer))
                 {
                     if (RestoreFileClient(check.FileNameServer, check.FileNameClient))
-                        statusDelegate("[RestoreVersion] File Sended Succesfully, Server Name:" + check.FileNameServer + "User Name: " + check.FileNameClient, fSyncServer.LOG_INFO);
+                        statusDelegate("[RestoreVersion] File Sent Succesfully, Server Name:" + check.FileNameServer + "User Name: " + check.FileNameClient, fSyncServer.LOG_INFO);
                     else statusDelegate("[RestoreVersion] Protocol Error Sending File", fSyncServer.LOG_ERROR);
                 }
                 else
@@ -699,7 +699,11 @@ namespace WindowsFormsApplication1
                     statusDelegate("File doesn't exists  " + check.FileNameServer + "(Restore Version)", fSyncServer.LOG_INFO);
                 }
             }
-
+            //per evitare version =-1
+            Int64 lastVers = 0;
+            Int64 currentVersion = mySQLite.getUserMinMaxVersion(stateClient.userID, ref lastVers);
+            stateClient.version = lastVers;
+            //
             stateClient.version++;
             statusDelegate("[RestoreVersion] Update DB", fSyncServer.LOG_INFO);
             mySQLite.setUserFiles(stateClient.userID, stateClient.version, tempCheck); // Call DB Update to new Version all the Files
