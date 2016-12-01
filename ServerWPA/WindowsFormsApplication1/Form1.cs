@@ -120,5 +120,74 @@ namespace WindowsFormsApplication1
             nUDVersion.Enabled = true;
             bStop.Enabled = false;
         }
+
+        private void bDel_Click(object sender, EventArgs e)
+        {
+
+            SyncSQLite mySQLite;
+            mySQLite = new SyncSQLite();
+
+            ListView.SelectedListViewItemCollection users = lvUsers.SelectedItems;
+            ListViewItem item = null;
+            if (users.Count != 0)
+                item = users[0];
+            if (item != null)
+            {
+                Int64 userID = Int64.Parse(item.SubItems[0].Text);
+                mySQLite.deleteUser(userID);
+            }
+            if (lvUsers.Items.Count != 0)
+                bUsers_Click(null, null);
+            mySQLite.closeConnection();
+        }
+
+        private void bUsers_Click(object sender, EventArgs e)
+        {
+            lvUsers.Items.Clear();
+            SyncSQLite mySQLite;
+            List<SyncSQLite.UserVersions> myUserVersion;
+            mySQLite = new SyncSQLite();
+            myUserVersion = mySQLite.getUsersList();
+            foreach (SyncSQLite.UserVersions user in myUserVersion)
+            {
+                lvUsers.Items.Add(new ListViewItem(new String[] { user.userId.ToString(), user.username, user.versionCount.ToString() }));
+            }
+            mySQLite.closeConnection();
+        }
+
+        private void lvUsers_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            lvVersions.Items.Clear();
+            SyncSQLite mySQLite;
+            ListViewItem item = null;
+            Int64 userID;
+            Int64 maxVers = 0;
+            Int64 minVers;
+            mySQLite = new SyncSQLite();
+
+            ListView.SelectedListViewItemCollection user = lvUsers.SelectedItems;
+            if (user.Count != 0)
+                item = user[0];
+            if (item != null)
+            {
+                userID = Int64.Parse(item.SubItems[0].Text);
+                minVers = mySQLite.getUserMinMaxVersion(userID, ref maxVers);
+                if ((minVers == 0) && (maxVers == 0))
+                {
+                    lvVersions.Items.Add(new ListViewItem(new String[] { "ANY", "ANY", "ANY" }));
+                }
+                else
+                {
+                    while (minVers <= maxVers)
+                    {
+                        List<FileChecksum> files = mySQLite.getUserFiles(userID, minVers, "");
+                        if (files.Count != 0)
+                            lvVersions.Items.Add(new ListViewItem(new String[] { minVers.ToString(), files.Count.ToString(), files[0].Timestamp }));
+                        minVers++;
+                    }
+                }
+            }
+            mySQLite.closeConnection();
+        }
     }
 }

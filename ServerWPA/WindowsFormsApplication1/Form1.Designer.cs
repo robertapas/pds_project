@@ -54,6 +54,8 @@
             this.cId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cUsername = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.bUsers = new System.Windows.Forms.Button();
+            this.bDel = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nUDVersion)).BeginInit();
@@ -242,6 +244,8 @@
             // 
             // tVersions
             // 
+            this.tVersions.Controls.Add(this.bDel);
+            this.tVersions.Controls.Add(this.bUsers);
             this.tVersions.Controls.Add(this.lVersions);
             this.tVersions.Controls.Add(this.lUsers);
             this.tVersions.Controls.Add(this.lvVersions);
@@ -321,6 +325,7 @@
             this.lvUsers.TabIndex = 2;
             this.lvUsers.UseCompatibleStateImageBehavior = false;
             this.lvUsers.View = System.Windows.Forms.View.Details;
+            this.lvUsers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvUsers_MouseDoubleClick);
             // 
             // cId
             // 
@@ -336,6 +341,28 @@
             // 
             this.cVersion.Text = "Version";
             this.cVersion.Width = 80;
+            // 
+            // bUsers
+            // 
+            this.bUsers.Location = new System.Drawing.Point(398, 140);
+            this.bUsers.Margin = new System.Windows.Forms.Padding(2);
+            this.bUsers.Name = "bUsers";
+            this.bUsers.Size = new System.Drawing.Size(54, 19);
+            this.bUsers.TabIndex = 6;
+            this.bUsers.Text = "Users";
+            this.bUsers.UseVisualStyleBackColor = true;
+            this.bUsers.Click += new System.EventHandler(this.bUsers_Click);
+            // 
+            // bDel
+            // 
+            this.bDel.Location = new System.Drawing.Point(479, 140);
+            this.bDel.Margin = new System.Windows.Forms.Padding(2);
+            this.bDel.Name = "bDel";
+            this.bDel.Size = new System.Drawing.Size(72, 19);
+            this.bDel.TabIndex = 7;
+            this.bDel.Text = "Delete User";
+            this.bDel.UseVisualStyleBackColor = true;
+            this.bDel.Click += new System.EventHandler(this.bDel_Click);
             // 
             // fSyncServer
             // 
@@ -386,6 +413,8 @@
         private System.Windows.Forms.ColumnHeader cVersion;
         private System.Windows.Forms.NumericUpDown nUDVersion;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button bDel;
+        private System.Windows.Forms.Button bUsers;
     }
 }
 

@@ -354,7 +354,25 @@ namespace clientWpf
             }
         }
 
-  
+        private async void Restore_Click(object sender, RoutedEventArgs e)
+        {
+            bRestore.IsEnabled = false;
+            Int64 selVersion = versions[lVersions.SelectedIndex].VersionNum;
+            MessageBoxResult res = System.Windows.MessageBox.Show("Do you want to restore version number " + selVersion + " ?", "Restore system", System.Windows.MessageBoxButton.YesNo);
+            if (res == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    await syncManager.restoreVersion(selVersion);
+                    System.Windows.MessageBox.Show("Restore Done!", "Restoring system");
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show("Restore failed:\n" + ex.Message, "Restoring system", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            bRestore.IsEnabled = true;
+        }
 
         private void bSyncNow_Click(object sender, RoutedEventArgs e)
     {

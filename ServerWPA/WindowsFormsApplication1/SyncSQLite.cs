@@ -194,5 +194,44 @@ namespace WindowsFormsApplication1
             command.Parameters.AddWithValue("version", version);
             command.ExecuteNonQuery();
         }
+
+        public List<UserVersions> getUsersList()
+        {
+            UserVersions item;
+            List<UserVersions> userList = new List<UserVersions>();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM users", connection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                item = new UserVersions();
+                item.username = (string)reader["username"];
+                item.userId = (Int64)reader["id"];
+                userList.Add(item);
+            }
+            reader.Close();
+            for (int i = 0; i < userList.Count; i++)
+            {
+                command = new SQLiteCommand("SELECT IFNULL(COUNT( DISTINCT version) , 0) AS count FROM user_" + userList[i].userId, connection);
+                reader = command.ExecuteReader();
+                if (reader.Read())
+                    userList[i].versionCount = (Int64)reader["count"];
+                else
+                    userList[i].versionCount = 0;
+
+                reader.Close();
+            }
+            return userList;
+        }
+
+        public bool deleteUser(Int64 userId)
+        {
+            if (this.executeQuery("DELETE FROM users WHERE id = @param1;", userId) == 1)
+            {
+                this.executeQuery("DROP TABLE user_" + userId);
+                return true;
+            }
+            return false;
+        }
+
     }
 }

@@ -206,14 +206,14 @@ namespace WindowsFormsApplication1
                     case SyncCommand.CommandSet.START:
                         statusDelegate(" Command -> START ", fSyncServer.LOG_INFO);
                         return StartSession();
-                    /*case SyncCommand.CommandSet.RESTORE:
+                    case SyncCommand.CommandSet.RESTORE:
                         statusDelegate("Command -> RESTORE", fSyncServer.LOG_INFO);
                         if (stateClient.userID == -1)
                         {
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return RestoreVersion();*/
+                        return RestoreVersion();
                     case SyncCommand.CommandSet.ENDSYNC:
                         statusDelegate("Command -> ENDSYNC", fSyncServer.LOG_INFO);
                         return EndSync();
@@ -660,6 +660,55 @@ namespace WindowsFormsApplication1
             statusDelegate("[GetVersions] Send End check Message", fSyncServer.LOG_INFO);
             SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ENDCHECK));
             WellStop();
+            return true;
+        }
+
+        public Boolean RestoreFileClient(String serverName, String clientName)
+        {
+
+            FileInfo fi = new FileInfo(serverName);
+            statusDelegate("[RestoreFileClient] Send File Command with Name and Size", fSyncServer.LOG_INFO);
+            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.FILE, clientName, fi.Length.ToString()));
+            // Send file fileName to remote device
+            stateClient.workSocket.SendFile(serverName);
+            statusDelegate("[RestoreFileClient] File \"" + serverName + "\" sended Succesfully", fSyncServer.LOG_INFO);
+            receiveDone.Reset();
+            // Receive the response from the remote device.
+            this.ReceiveCommand(stateClient.workSocket);
+            receiveDone.WaitOne();
+            if (cmd.Type != SyncCommand.CommandSet.ACK)
+                return false;
+            return true;
+
+        }
+
+
+        public Boolean RestoreVersion()
+        {
+            tempCheck = mySQLite.getUserFiles(stateClient.userID, cmd.Version, serverDir); //Call DB Retrieve Version to Restore
+            foreach (FileChecksum check in tempCheck)
+            {
+                if (File.Exists(check.FileNameServer))
+                {
+                    if (RestoreFileClient(check.FileNameServer, check.FileNameClient))
+                        statusDelegate("[RestoreVersion] File Sended Succesfully, Server Name:" + check.FileNameServer + "User Name: " + check.FileNameClient, fSyncServer.LOG_INFO);
+                    else statusDelegate("[RestoreVersion] Protocol Error Sending File", fSyncServer.LOG_ERROR);
+                }
+                else
+                {
+                    statusDelegate("File doesn't exists  " + check.FileNameServer + "(Restore Version)", fSyncServer.LOG_INFO);
+                }
+            }
+
+            stateClient.version++;
+            statusDelegate("[RestoreVersion] Update DB", fSyncServer.LOG_INFO);
+            mySQLite.setUserFiles(stateClient.userID, stateClient.version, tempCheck); // Call DB Update to new Version all the Files
+
+            statusDelegate("[RestoreVersion] Send End Restore Message", fSyncServer.LOG_INFO);
+            SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ENDRESTORE));
+
+            WellStop();
+            tempCheck.Clear();
             return true;
         }
 

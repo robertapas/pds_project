@@ -495,6 +495,58 @@ namespace clientWpf
             return versions;
         }
 
+        public async Task restoreVersion(Int64 versionNum)
+        {
+            Exception ex = null;
+            await Task.Run(() =>
+            {
+                SyncCommand sc;
+                try
+                {
+                    connectionMutex.WaitOne();
+                    serverConnect();
+                    // login
+                    this.sendCommand(new SyncCommand(SyncCommand.CommandSet.LOGIN, username, password));
+                    if (receiveCommand().Type == SyncCommand.CommandSet.AUTHORIZED)
+                    {
+                        statusDelegate("Start restore...");
+                        sendCommand(new SyncCommand(SyncCommand.CommandSet.RESTORE, versionNum.ToString()));
+                        string tempDir = System.IO.Path.GetTempPath() + "syncClient";
+                        while ((sc = this.receiveCommand()).Type != SyncCommand.CommandSet.ENDRESTORE)
+                        {
+                            if (sc.Type != SyncCommand.CommandSet.FILE) throw new Exception("Protocol error");
+                            this.getFile(tempDir + sc.FileName, sc.FileSize);
+                        }
+                        // commit changes
+                        if (Directory.Exists(tempDir) && Directory.EnumerateFileSystemEntries(tempDir).Any()) // if tempDir is not empty
+                        {
+                            Directory.Delete(syncDirectory, true);
+                            this.moveFiles(tempDir, syncDirectory);
+                            Directory.Delete(tempDir, true);
+                        }
+                        else
+                        {
+                            throw new Exception("You cannot restore an empty version");
+                        }
+                        statusDelegate("Restore done");
+                    }
+                    else
+                    {
+                        statusDelegate("Login fail");
+                    }
+                }
+                catch (Exception exx)
+                {
+                    ex = exx;
+                }
+                finally
+                {
+                    tcpClient.Close();
+                    connectionMutex.ReleaseMutex();
+                }
+            });
+            if (ex != null) throw ex;
+        }
 
         private void getFile(String fileName, int fileLength)
         {
