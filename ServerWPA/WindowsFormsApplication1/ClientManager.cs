@@ -332,6 +332,11 @@ namespace WindowsFormsApplication1
             {
                 statusDelegate("[LoginUser] User Credential Confermed", fSyncServer.LOG_INFO);
                 stateClient.userID = userID;
+                //aggiunta versione
+                Int64 lastVers = 0;
+                Int64 currentVersion = mySQLite.getUserMinMaxVersion(stateClient.userID, ref lastVers);
+                stateClient.version = lastVers;
+                //
                 serverDir += "\\user" + stateClient.userID;
                 stateClient.username = cmd.Username;
                 stateClient.password = cmd.Password;
@@ -685,6 +690,7 @@ namespace WindowsFormsApplication1
 
         public Boolean RestoreVersion()
         {
+            tempCheck.Clear();
             tempCheck = mySQLite.getUserFiles(stateClient.userID, cmd.Version, serverDir); //Call DB Retrieve Version to Restore
             foreach (FileChecksum check in tempCheck)
             {
@@ -699,15 +705,15 @@ namespace WindowsFormsApplication1
                     statusDelegate("File doesn't exists  " + check.FileNameServer + "(Restore Version)", fSyncServer.LOG_INFO);
                 }
             }
-            //per evitare version =-1
+            /*per evitare version =-1
             Int64 lastVers = 0;
             Int64 currentVersion = mySQLite.getUserMinMaxVersion(stateClient.userID, ref lastVers);
             stateClient.version = lastVers;
-            //
+            */
             stateClient.version++;
             statusDelegate("[RestoreVersion] Update DB", fSyncServer.LOG_INFO);
             mySQLite.setUserFiles(stateClient.userID, stateClient.version, tempCheck); // Call DB Update to new Version all the Files
-
+            statusDelegate("[RestoreVersion] DB update successful", fSyncServer.LOG_INFO);
             statusDelegate("[RestoreVersion] Send End Restore Message", fSyncServer.LOG_INFO);
             SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.ENDRESTORE));
 

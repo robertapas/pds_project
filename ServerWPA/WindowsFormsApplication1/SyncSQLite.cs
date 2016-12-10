@@ -134,11 +134,15 @@ namespace WindowsFormsApplication1
             if (reader.Read())
             {
                 maxVersion = (Int64)reader["max_version"];
-                return (Int64)reader["min_version"];
+                
+                Int64 ret = (Int64)reader["min_version"];
+                reader.Close();
+                return ret;
             }
             else
             {
                 maxVersion = -1;
+                reader.Close();
                 return -1;
             }
         }
@@ -146,6 +150,7 @@ namespace WindowsFormsApplication1
         public List<FileChecksum> getUserFiles(Int64 userId, Int64 version, string serverBaseDir)
         {
             List<FileChecksum> userFiles = new List<FileChecksum>();
+            userFiles.Clear();
             SQLiteCommand command = new SQLiteCommand("SELECT * FROM user_" + userId + " WHERE version = @version;", connection);
             command.Parameters.AddWithValue("version", version);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -161,16 +166,18 @@ namespace WindowsFormsApplication1
         {
             SQLiteCommand command;
             string current_timestamp = string.Format("{0:dd-MM-yyyy h-mm-ss-tt}", DateTime.Now);
-            foreach (FileChecksum file in fileList)
-            {
-                command = new SQLiteCommand("INSERT INTO user_" + userId + " (version, server_file, client_file, checksum, timestamp) VALUES (@version, @server_file, @client_file, @checksum, @timestamp);", connection);
-                command.Parameters.AddWithValue("version", version);
-                command.Parameters.AddWithValue("server_file", file.FileNameServerDB);
-                command.Parameters.AddWithValue("client_file", file.FileNameClient);
-                command.Parameters.AddWithValue("checksum", file.ChecksumBytes);
-                command.Parameters.AddWithValue("timestamp", current_timestamp);
-                command.ExecuteNonQuery();
-            }
+
+                foreach (FileChecksum file in fileList)
+                {
+                    command = new SQLiteCommand("INSERT INTO user_" + userId + " (version, server_file, client_file, checksum, timestamp) VALUES (@version, @server_file, @client_file, @checksum, @timestamp);", connection);
+                    command.Parameters.AddWithValue("version", version);
+                    command.Parameters.AddWithValue("server_file", file.FileNameServerDB);
+                    command.Parameters.AddWithValue("client_file", file.FileNameClient);
+                    command.Parameters.AddWithValue("checksum", file.ChecksumBytes);
+                    command.Parameters.AddWithValue("timestamp", current_timestamp);
+                    command.ExecuteNonQuery();
+                }
+            
 
         }
 
