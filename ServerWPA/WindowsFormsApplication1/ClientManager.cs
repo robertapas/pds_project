@@ -262,7 +262,7 @@ namespace WindowsFormsApplication1
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return GetFileVersions();/*
+                        return GetFileVersions();
                     case SyncCommand.CommandSet.GET:
                         statusDelegate("Command -> GET", fSyncServer.LOG_INFO);
                         if (stateClient.userID == -1)
@@ -270,7 +270,7 @@ namespace WindowsFormsApplication1
                             statusDelegate("You must login before using this command", fSyncServer.LOG_ERROR);
                             return false;
                         }
-                        return GetFile();*/
+                        return GetFile();
                     case SyncCommand.CommandSet.STOP:
                         statusDelegate("Command -> STOP", fSyncServer.LOG_INFO);
                         syncEnd = true ;
@@ -498,6 +498,47 @@ namespace WindowsFormsApplication1
             statusDelegate("[DeleteFile] File Correctly Delete from the list of the files of the current Version", fSyncServer.LOG_INFO);
             return true;
         }
+
+        public Boolean GetFile()
+        {
+            tempCheck = mySQLite.getUserFiles(stateClient.userID, cmd.Version, serverDir); //Call DB Retrieve Version to Restore
+
+            int index = tempCheck.FindIndex(x => (x.FileNameClient == cmd.FileName) && (x.Version == cmd.Version));
+            FileChecksum newFile = mySQLite.getFileChecksum(stateClient.userID, cmd.FileName, cmd.Version, serverDir); //Call DB Retrieve Version to Restore
+            if (index != -1)
+            {
+                tempCheck.RemoveAt(index);
+                statusDelegate("[GetFile] Deleted old version file correctly", fSyncServer.LOG_INFO);
+            }
+
+            if (newFile != null && File.Exists(newFile.FileNameServer))
+            {
+                if (RestoreFileClient(newFile.FileNameServer, newFile.FileNameClient))
+                {
+                    statusDelegate("[GetFile] File Sended Succesfully, Server Name:" + newFile.FileNameServer + "User Name: " + newFile.FileNameClient, fSyncServer.LOG_INFO);
+                    tempCheck.Add(newFile);
+                    stateClient.version++;
+                    statusDelegate("[GetFile] Update DB", fSyncServer.LOG_INFO);
+                    mySQLite.setUserFiles(stateClient.userID, stateClient.version, tempCheck); // Call DB Update to new Version all the Files
+                    tempCheck.Clear();
+                    WellStop();
+                }
+                else
+                {
+                    statusDelegate("[GetFile] Protocol Error Sending File", fSyncServer.LOG_ERROR);
+                    badStop();
+                }
+            }
+            else
+            {
+                statusDelegate("[GetFile] File doesn't exists  " + newFile.FileNameServer, fSyncServer.LOG_ERROR);
+                badStop();
+            }
+
+            tempCheck.Clear();
+            return true;
+        }
+
 
         public Boolean EndSync()
         {

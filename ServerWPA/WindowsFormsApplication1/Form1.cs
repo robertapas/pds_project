@@ -106,10 +106,6 @@ namespace WindowsFormsApplication1
             settings[2] = nUDVersion.Value.ToString();
         }
 
-        private void tSettings_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void bStop_Click(object sender, EventArgs e)
         {
@@ -189,5 +185,7 @@ namespace WindowsFormsApplication1
             }
             mySQLite.closeConnection();
         }
+
+
     }
 }

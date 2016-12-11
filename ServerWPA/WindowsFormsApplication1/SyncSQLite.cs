@@ -100,7 +100,7 @@ namespace WindowsFormsApplication1
             command = new SQLiteCommand("INSERT INTO users (username, password, user_dir) VALUES (@username, @password, @directory)", connection);
             command.Parameters.AddWithValue("username", username);
             command.Parameters.AddWithValue("password", password);
-            command.Parameters.AddWithValue("directory", directory);
+            command.Parameters.AddWithValue("directory", "-");
             command.ExecuteNonQuery();
             command = new SQLiteCommand("select last_insert_rowid()", connection);
             Int64 lastId = (Int64)command.ExecuteScalar();
@@ -118,6 +118,19 @@ namespace WindowsFormsApplication1
             if (reader.Read())
             {
                 string db_dir = (string)reader["user_dir"];
+
+
+                if (db_dir.CompareTo("-")==0)
+                {
+                    //first time START
+
+                    SQLiteCommand command2 = new SQLiteCommand("UPDATE users SET user_dir = @directory WHERE username = @username", connection);
+                    command2.Parameters.AddWithValue("directory", directory);
+                    command2.Parameters.AddWithValue("username", username);
+                    command2.ExecuteNonQuery();
+                    return (Int64)reader["id"];
+                }
+
                 if (directory == db_dir)
                 {
                     return (Int64)reader["id"];
@@ -240,5 +253,18 @@ namespace WindowsFormsApplication1
             return false;
         }
 
+        public FileChecksum getFileChecksum(Int64 userId, string filename, Int64 version, string serverBaseDir)
+        {
+            FileChecksum fileChecksum = null;
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM user_" + userId + " WHERE client_file = @filename", connection);
+            command.Parameters.AddWithValue("filename", filename);
+            SQLiteDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                fileChecksum = new FileChecksum(serverBaseDir + (string)reader["server_file"], (string)reader["server_file"], (string)reader["client_file"], (byte[])reader["checksum"], (Int64)reader["version"], (string)reader["timestamp"]);
+                reader.Close();
+            }
+            return fileChecksum;
+        }
     }
 }

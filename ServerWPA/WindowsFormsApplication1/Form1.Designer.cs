@@ -44,6 +44,8 @@
             this.lPort = new System.Windows.Forms.Label();
             this.nPort = new System.Windows.Forms.NumericUpDown();
             this.tVersions = new System.Windows.Forms.TabPage();
+            this.bDel = new System.Windows.Forms.Button();
+            this.bUsers = new System.Windows.Forms.Button();
             this.lVersions = new System.Windows.Forms.Label();
             this.lUsers = new System.Windows.Forms.Label();
             this.lvVersions = new System.Windows.Forms.ListView();
@@ -54,8 +56,6 @@
             this.cId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cUsername = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.bUsers = new System.Windows.Forms.Button();
-            this.bDel = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nUDVersion)).BeginInit();
@@ -67,11 +67,12 @@
             // 
             this.tabControl1.Controls.Add(this.tSettings);
             this.tabControl1.Controls.Add(this.tVersions);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(686, 316);
+            this.tabControl1.Size = new System.Drawing.Size(634, 411);
             this.tabControl1.TabIndex = 0;
             // 
             // tSettings
@@ -93,11 +94,10 @@
             this.tSettings.Margin = new System.Windows.Forms.Padding(2);
             this.tSettings.Name = "tSettings";
             this.tSettings.Padding = new System.Windows.Forms.Padding(2);
-            this.tSettings.Size = new System.Drawing.Size(678, 290);
+            this.tSettings.Size = new System.Drawing.Size(626, 385);
             this.tSettings.TabIndex = 0;
             this.tSettings.Text = "Settings";
             this.tSettings.UseVisualStyleBackColor = true;
-            this.tSettings.Click += new System.EventHandler(this.tSettings_Click);
             // 
             // nUDVersion
             // 
@@ -129,17 +129,18 @@
             // lConnectedNum
             // 
             this.lConnectedNum.AutoSize = true;
-            this.lConnectedNum.Location = new System.Drawing.Point(630, 247);
+            this.lConnectedNum.Location = new System.Drawing.Point(585, 327);
             this.lConnectedNum.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lConnectedNum.Name = "lConnectedNum";
             this.lConnectedNum.Size = new System.Drawing.Size(13, 13);
             this.lConnectedNum.TabIndex = 10;
             this.lConnectedNum.Text = "0";
+          
             // 
             // lConnectedUser
             // 
             this.lConnectedUser.AutoSize = true;
-            this.lConnectedUser.Location = new System.Drawing.Point(539, 247);
+            this.lConnectedUser.Location = new System.Drawing.Point(494, 327);
             this.lConnectedUser.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lConnectedUser.Name = "lConnectedUser";
             this.lConnectedUser.Size = new System.Drawing.Size(87, 13);
@@ -148,10 +149,10 @@
             // 
             // bStop
             // 
-            this.bStop.Location = new System.Drawing.Point(129, 244);
+            this.bStop.Location = new System.Drawing.Point(132, 316);
             this.bStop.Margin = new System.Windows.Forms.Padding(2);
             this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(56, 19);
+            this.bStop.Size = new System.Drawing.Size(80, 34);
             this.bStop.TabIndex = 8;
             this.bStop.Text = "Stop Server";
             this.bStop.UseVisualStyleBackColor = true;
@@ -159,10 +160,10 @@
             // 
             // bStart
             // 
-            this.bStart.Location = new System.Drawing.Point(25, 244);
+            this.bStart.Location = new System.Drawing.Point(25, 316);
             this.bStart.Margin = new System.Windows.Forms.Padding(2);
             this.bStart.Name = "bStart";
-            this.bStart.Size = new System.Drawing.Size(56, 19);
+            this.bStart.Size = new System.Drawing.Size(87, 34);
             this.bStart.TabIndex = 7;
             this.bStart.Text = "Start server";
             this.bStart.UseVisualStyleBackColor = true;
@@ -170,12 +171,14 @@
             // 
             // lbLog
             // 
+            this.lbLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbLog.FormattingEnabled = true;
             this.lbLog.HorizontalScrollbar = true;
             this.lbLog.Location = new System.Drawing.Point(25, 155);
             this.lbLog.Margin = new System.Windows.Forms.Padding(2);
             this.lbLog.Name = "lbLog";
-            this.lbLog.Size = new System.Drawing.Size(618, 69);
+            this.lbLog.Size = new System.Drawing.Size(573, 147);
             this.lbLog.TabIndex = 6;
             // 
             // lLog
@@ -200,7 +203,7 @@
             // 
             // bBrowse
             // 
-            this.bBrowse.Location = new System.Drawing.Point(587, 65);
+            this.bBrowse.Location = new System.Drawing.Point(542, 65);
             this.bBrowse.Margin = new System.Windows.Forms.Padding(2);
             this.bBrowse.Name = "bBrowse";
             this.bBrowse.Size = new System.Drawing.Size(56, 19);
@@ -214,7 +217,7 @@
             this.tDirectory.Location = new System.Drawing.Point(132, 65);
             this.tDirectory.Margin = new System.Windows.Forms.Padding(2);
             this.tDirectory.Name = "tDirectory";
-            this.tDirectory.Size = new System.Drawing.Size(452, 20);
+            this.tDirectory.Size = new System.Drawing.Size(384, 20);
             this.tDirectory.TabIndex = 2;
             this.tDirectory.Text = "C:\\Users\\Roberta\\progetto_pds";
             // 
@@ -253,10 +256,32 @@
             this.tVersions.Location = new System.Drawing.Point(4, 22);
             this.tVersions.Margin = new System.Windows.Forms.Padding(2);
             this.tVersions.Name = "tVersions";
-            this.tVersions.Size = new System.Drawing.Size(678, 290);
+            this.tVersions.Size = new System.Drawing.Size(626, 385);
             this.tVersions.TabIndex = 2;
             this.tVersions.Text = "Versions";
             this.tVersions.UseVisualStyleBackColor = true;
+            // 
+            // bDel
+            // 
+            this.bDel.Location = new System.Drawing.Point(479, 140);
+            this.bDel.Margin = new System.Windows.Forms.Padding(2);
+            this.bDel.Name = "bDel";
+            this.bDel.Size = new System.Drawing.Size(72, 19);
+            this.bDel.TabIndex = 7;
+            this.bDel.Text = "Delete User";
+            this.bDel.UseVisualStyleBackColor = true;
+            this.bDel.Click += new System.EventHandler(this.bDel_Click);
+            // 
+            // bUsers
+            // 
+            this.bUsers.Location = new System.Drawing.Point(398, 140);
+            this.bUsers.Margin = new System.Windows.Forms.Padding(2);
+            this.bUsers.Name = "bUsers";
+            this.bUsers.Size = new System.Drawing.Size(54, 19);
+            this.bUsers.TabIndex = 6;
+            this.bUsers.Text = "Users";
+            this.bUsers.UseVisualStyleBackColor = true;
+            this.bUsers.Click += new System.EventHandler(this.bUsers_Click);
             // 
             // lVersions
             // 
@@ -288,7 +313,7 @@
             this.lvVersions.FullRowSelect = true;
             this.lvVersions.Location = new System.Drawing.Point(21, 180);
             this.lvVersions.Name = "lvVersions";
-            this.lvVersions.Size = new System.Drawing.Size(593, 101);
+            this.lvVersions.Size = new System.Drawing.Size(586, 196);
             this.lvVersions.TabIndex = 3;
             this.lvVersions.UseCompatibleStateImageBehavior = false;
             this.lvVersions.View = System.Windows.Forms.View.Details;
@@ -321,7 +346,7 @@
             this.lvUsers.Location = new System.Drawing.Point(21, 27);
             this.lvUsers.MultiSelect = false;
             this.lvUsers.Name = "lvUsers";
-            this.lvUsers.Size = new System.Drawing.Size(593, 108);
+            this.lvUsers.Size = new System.Drawing.Size(586, 108);
             this.lvUsers.TabIndex = 2;
             this.lvUsers.UseCompatibleStateImageBehavior = false;
             this.lvUsers.View = System.Windows.Forms.View.Details;
@@ -342,35 +367,14 @@
             this.cVersion.Text = "Version";
             this.cVersion.Width = 80;
             // 
-            // bUsers
-            // 
-            this.bUsers.Location = new System.Drawing.Point(398, 140);
-            this.bUsers.Margin = new System.Windows.Forms.Padding(2);
-            this.bUsers.Name = "bUsers";
-            this.bUsers.Size = new System.Drawing.Size(54, 19);
-            this.bUsers.TabIndex = 6;
-            this.bUsers.Text = "Users";
-            this.bUsers.UseVisualStyleBackColor = true;
-            this.bUsers.Click += new System.EventHandler(this.bUsers_Click);
-            // 
-            // bDel
-            // 
-            this.bDel.Location = new System.Drawing.Point(479, 140);
-            this.bDel.Margin = new System.Windows.Forms.Padding(2);
-            this.bDel.Name = "bDel";
-            this.bDel.Size = new System.Drawing.Size(72, 19);
-            this.bDel.TabIndex = 7;
-            this.bDel.Text = "Delete User";
-            this.bDel.UseVisualStyleBackColor = true;
-            this.bDel.Click += new System.EventHandler(this.bDel_Click);
-            // 
             // fSyncServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(704, 320);
+            this.ClientSize = new System.Drawing.Size(634, 411);
             this.Controls.Add(this.tabControl1);
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "fSyncServer";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.fSyncServer_Load);

@@ -44,20 +44,9 @@ namespace clientWpf
             settingsManager = new SettingsManager();
             tAddress.Text = settingsManager.readSetting("connection", "address");
             tPort.Text = settingsManager.readSetting("connection", "port");
-            tDirectory.Text = settingsManager.readSetting("account", "directory");
+            //tDirectory.Text = settingsManager.readSetting("account", "directory");
             tTimeout.Text = settingsManager.readSetting("connection", "syncTime");
         }
-
-       /* private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-            // Start the login procedure
-            this.Dispatcher.BeginInvoke((Action)(() =>
-            {
-                // i have to create the connection in order to perform the login
-                openLogin();
-            }));
-        }*/
 
         private async void login_register()
         {
@@ -280,7 +269,7 @@ namespace clientWpf
                 // Save settings
                 settingsManager.writeSetting("connection", "address", tAddress.Text);
                 settingsManager.writeSetting("connection", "port", tPort.Text);
-                settingsManager.writeSetting("account", "directory", tDirectory.Text);
+                //settingsManager.writeSetting("account", "directory", tDirectory.Text);
                 settingsManager.writeSetting("connection", "syncTime", tTimeout.Text);
             }
             catch (Exception ex)
