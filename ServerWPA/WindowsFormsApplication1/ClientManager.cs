@@ -382,6 +382,7 @@ namespace WindowsFormsApplication1
                 stateClient.version = 0;
                 statusDelegate("[NewUser] Send Back Authorized Message", fSyncServer.LOG_INFO);
                 SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.AUTHORIZED));
+                WellStop();
                 return true;
             }
         }
@@ -391,7 +392,7 @@ namespace WindowsFormsApplication1
             Int64 userID = mySQLite.checkUserDirectory(stateClient.username, cmd.Directory); //Call DB Check Directory User
             if (userID == -1)
             {
-                //TODO: FRA e Ro, vedere gestione cartelle differenti
+      
                 statusDelegate("[StartSession] User Directory Change NOT Authorized", fSyncServer.LOG_INFO);
                 statusDelegate("[StartSession] Send Back Unauthorized Message because the user change the root directory for the connection", fSyncServer.LOG_INFO);
                 SendCommand(stateClient.workSocket, new SyncCommand(SyncCommand.CommandSet.UNAUTHORIZED));

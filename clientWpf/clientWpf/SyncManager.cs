@@ -91,21 +91,6 @@ namespace clientWpf
         public void stopSync()
         {
 
-            /* try
-             {
-                if (tcpClient.Connected)
-                 {
-                     this.sendCommand(new SyncCommand(SyncCommand.CommandSet.STOP));
-
-                 }
-                 else statusDelegate("Cannot send STOP. tcpClient connected");
-             }
-             catch (Exception e)
-             {
-                 statusDelegate("[stopSync]: " + e.Message);
-             }*/
-            //Thread.Sleep(4000);
-
             this.thread_stopped = true;
             // Release the socket.
 
@@ -117,7 +102,7 @@ namespace clientWpf
             }
             if (syncThread != null && syncThread.IsAlive)
             {
-                syncThread.Abort(); // TODO evitare di usare Abort
+                syncThread.Abort(); 
             }
         }
 
@@ -300,7 +285,6 @@ namespace clientWpf
                     syncSleepTimer.Start();
                     doSyncEvent.Reset();
                     doSyncEvent.WaitOne();
-                    //Thread.Sleep(sync_sleeping_time);
                 }
             }
             catch (Exception ex)
@@ -311,11 +295,11 @@ namespace clientWpf
             {
                 try
                 {
-                    connectionMutex.ReleaseMutex(); // TODO
+                    connectionMutex.ReleaseMutex(); 
                 }
                 catch (Exception e)
                 {
-                    statusDelegate(e.Message, true);
+                    //statusDelegate(e.Message, true);
                 }
             }
         }

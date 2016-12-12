@@ -149,6 +149,7 @@ namespace WindowsFormsApplication1
                 lvUsers.Items.Add(new ListViewItem(new String[] { user.userId.ToString(), user.username, user.versionCount.ToString() }));
             }
             mySQLite.closeConnection();
+            lvVersions.Items.Clear();
         }
 
         private void lvUsers_MouseDoubleClick(object sender, MouseEventArgs e)
