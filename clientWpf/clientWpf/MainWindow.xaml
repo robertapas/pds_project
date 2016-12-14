@@ -104,7 +104,7 @@
                     <Label Content="Server address:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.501" Margin="10,64,0,0"/>
                     <TextBox Name="tAddress" Height="23" Margin="10,90,104,0" TextWrapping="Wrap" Text="192.168.1.130" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <Label Content="Port:" HorizontalAlignment="Right" Margin="0,64,60,0" VerticalAlignment="Top" RenderTransformOrigin="0.496,0.501" Grid.Column="1"/>
-                    <TextBox Name="tPort" HorizontalAlignment="Right" Height="23" Margin="0,90,10,0" TextWrapping="Wrap" Text="55555" VerticalAlignment="Top" Width="85" Grid.Column="1"/>
+                    <TextBox Name="tPort" HorizontalAlignment="Right" Height="23" Margin="0,90,10,0" TextWrapping="Wrap" Text="5555" VerticalAlignment="Top" Width="85" Grid.Column="1"/>
                     <Label Content="Sync time[s]:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.605,6.115" Margin="10,118,0,0"/>
                     <TextBox Name="tTimeout" TextWrapping="Wrap" Text="10" Margin="10,144,0,0" ToolTip="Time between two sync" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100"/>
                 </Grid>

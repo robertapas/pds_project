@@ -70,7 +70,7 @@ namespace clientWpf
 						try
 						{
 							await syncManager.restoreFileVersion(selectedFileName, selectedVersion);
-							//System.Windows.MessageBox.Show("Restore Done!", "Restoring system");
+							System.Windows.MessageBox.Show("Restore Done!", "Restoring system");
 						}
 						catch (Exception ex)
 						{

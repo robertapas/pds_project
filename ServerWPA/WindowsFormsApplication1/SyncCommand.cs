@@ -130,7 +130,7 @@ namespace WindowsFormsApplication1
 
         public static int searchJsonEnd(String jsonText)
         {
-            // TODO struttura debole
+
             bool quotes = false;
             for (int i = 0; i < jsonText.Length; i++)
             {
