@@ -544,7 +544,7 @@ namespace clientWpf
             BinaryWriter bFile = new BinaryWriter(File.Open(fileName, FileMode.Create));
 
             // Check input buffer of commands
-            if (receivedBuffer.Length > 0)
+            if (receivedBuffer.Length >= 0)
             {
                 // there are some data
                 if (receivedBuffer.Length <= fileLength)
@@ -562,14 +562,22 @@ namespace clientWpf
             }
 
             // Receive data from the server
-            statusBarDelegate((Int32)(byteSent * 90 / fileLength));
+
+            if (fileLength > 0)
+            {
+                statusBarDelegate((Int32)(byteSent * 90 / fileLength));
+            }
             while (byteSent < fileLength)
             {
                 rec = tcpClient.Receive(buffer);
                 bFile.Write(buffer, 0, rec);
                 byteSent += rec;
-                statusBarDelegate((Int32)(byteSent * 90 / fileLength));
-            }
+                if (fileLength > 0)
+                {
+                    statusBarDelegate((Int32)(byteSent * 90 / fileLength));
+                }
+
+             }
             bFile.Close();
             statusBarDelegate(90);
             this.sendCommand(new SyncCommand(SyncCommand.CommandSet.ACK));
